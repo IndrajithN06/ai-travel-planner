@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using AITravelPlanner.Domain.DTOs;
 using AITravelPlanner.Domain.Interfaces;
 
@@ -6,6 +7,7 @@ namespace AITravelPlanner.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class TravelPlansController : ControllerBase
     {
         private readonly ITravelPlanService _travelPlanService;

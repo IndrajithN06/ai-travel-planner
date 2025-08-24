@@ -38,6 +38,10 @@ namespace AITravelPlanner.Domain.Entities
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedDate { get; set; }
 
+        // User relationship
+        public int? UserId { get; set; }
+        public virtual User? User { get; set; }
+
         // Navigation properties for related entities
         public virtual ICollection<Activity> Activities { get; set; } = new List<Activity>();
         public virtual ICollection<Accommodation> Accommodations { get; set; } = new List<Accommodation>();
