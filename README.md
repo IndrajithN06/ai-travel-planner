@@ -2,93 +2,219 @@
 
 A comprehensive full-stack AI-powered travel planner and journal built with **ASP.NET Core Web API** (backend) and **Angular** (frontend), featuring JWT authentication and advanced travel planning capabilities.
 
-## 🌟 Features
+## Features
 
-### 🔐 Authentication & Authorization
-- **JWT (JSON Web Token) Authentication**
-- User registration and login
-- Password hashing with SHA256
-- Token refresh mechanism
-- Protected API endpoints
-- User profile management
+- **Travel Plan Management**: Create, read, update, and delete travel plans
+- **AI-Powered Generation**: Generate travel plans with AI recommendations
+- **Activity Management**: Manage activities within travel plans
+- **Accommodation Management**: Handle accommodation bookings
+- **Transportation Management**: Manage transportation details
+- **Public/Private Plans**: Share travel plans publicly or keep them private
+- **Search & Filter**: Search by destination, travel style, and date range
 
-### 🗺️ Travel Planning
-- **AI-powered travel recommendations**
-- Create and manage travel plans
-- Destination-based planning
-- Budget tracking and management
-- Travel style customization (Luxury, Adventure, Budget, etc.)
-- Group size considerations
+## Architecture
 
-### 📋 Comprehensive Travel Management
-- **Activities**: Sightseeing, cultural experiences, adventures
-- **Accommodations**: Hotels, hostels, vacation rentals
-- **Transportation**: Flights, trains, buses, car rentals
-- **Scheduling**: Date-based planning and coordination
-- **Cost tracking**: Per-item and total budget management
+The project follows Clean Architecture principles with the following layers:
 
-### 🎯 User Experience
-- **Public and Private Plans**: Share or keep plans private
-- **Detailed Planning**: Comprehensive activity and accommodation details
-- **Flexible Scheduling**: Customizable dates and durations
-- **Location-based Services**: Address and location tracking
+- **Domain**: Entities, interfaces, and DTOs
+- **Application**: Business logic and services
+- **Infrastructure**: Data access and external services
+- **API**: Controllers and HTTP endpoints
 
-## 🏗️ Architecture
+## Getting Started
 
-### Backend (ASP.NET Core Web API)
-```
-backend/
-├── AITravelPlanner.Api/           # API Layer (Controllers, Middleware)
-├── AITravelPlanner.Application/   # Business Logic Layer (Services)
-├── AITravelPlanner.Domain/        # Domain Layer (Entities, Interfaces)
-└── AITravelPlanner.Infrastructure/# Data Access Layer (DbContext, Repositories)
-```
+### Prerequisites
 
-### Frontend (Angular)
-```
-frontend/                          # Angular Application (Coming Soon)
-```
+- .NET 9.0 SDK
+- SQL Server (LocalDB for development)
+- Visual Studio 2022 or VS Code
 
-## 🛠️ Technology Stack
+### Installation
 
-### Backend
-- **ASP.NET Core 9.0** - Web API framework
-- **Entity Framework Core** - ORM for database operations
-- **SQL Server** - Database
-- **JWT Bearer Tokens** - Authentication
-- **Swagger/OpenAPI** - API documentation
-- **CORS** - Cross-origin resource sharing
+1. Clone the repository
+2. Navigate to the backend directory
+3. Restore NuGet packages:
+   ```bash
+   dotnet restore
+   ```
+4. Update the connection string in `appsettings.json` if needed
+5. Run the application:
+   ```bash
+   dotnet run --project AITravelPlanner.Api
+   ```
 
-### Frontend (Planned)
-- **Angular 17+** - Frontend framework
-- **TypeScript** - Programming language
-- **Angular Material** - UI components
-- **RxJS** - Reactive programming
+The API will be available at `https://localhost:7001` (or the configured port).
 
-## 📋 Prerequisites
+## API Endpoints
 
-- **.NET 9.0 SDK**
-- **SQL Server** (Local or Remote)
-- **Visual Studio 2022** or **VS Code**
-- **Node.js** (for frontend development)
+### Travel Plans
 
-## 🚀 Getting Started
+#### GET /api/travelplans
+Get all travel plans
 
-### 1. Clone the Repository
-```bash
-git clone https://github.com/yourusername/ai-travel-planner.git
-cd ai-travel-planner
-```
+#### GET /api/travelplans/public
+Get all public travel plans
 
-### 2. Backend Setup
+#### GET /api/travelplans/{id}
+Get a specific travel plan by ID
 
-#### Navigate to Backend Directory
-```bash
-cd backend
+#### GET /api/travelplans/destination/{destination}
+Get travel plans by destination
+
+#### GET /api/travelplans/style/{travelStyle}
+Get travel plans by travel style
+
+#### GET /api/travelplans/date-range?startDate={date}&endDate={date}
+Get travel plans by date range
+
+#### POST /api/travelplans
+Create a new travel plan[user specific]
+
+**Request Body:**
+```json
+{
+  "destination": "Paris, France",
+  "title": "Romantic Paris Getaway",
+  "startDate": "2024-06-01T00:00:00Z",
+  "endDate": "2024-06-08T00:00:00Z",
+  "description": "A romantic week in the City of Light",
+  "budget": 5000,
+  "travelStyle": "Luxury",
+  "groupSize": "Couple",
+  "isPublic": true
+}
 ```
 
-#### Configure Database Connection
-Update the connection string in `AITravelPlanner.Api/appsettings.json`:
+#### POST /api/travelplans/generate
+Generate an AI-powered travel plan
+
+**Request Body:**
+```json
+{
+  "destination": "Tokyo, Japan",
+  "startDate": "2024-07-01T00:00:00Z",
+  "endDate": "2024-07-08T00:00:00Z",
+  "travelStyle": "Adventure",
+  "groupSize": "Solo",
+  "budget": 3000,
+  "preferences": "Interested in technology and culture"
+}
+```
+
+#### PUT /api/travelplans/{id}
+Update an existing travel plan
+
+#### DELETE /api/travelplans/{id}
+Delete a travel plan
+
+### Activities
+
+#### GET /api/travelplans/{id}/activities
+Get all activities for a travel plan
+
+#### POST /api/travelplans/{id}/activities
+Add an activity to a travel plan
+
+#### GET /api/travelplans/activities/{activityId}
+Get a specific activity
+
+#### PUT /api/travelplans/activities/{activityId}
+Update an activity
+
+#### DELETE /api/travelplans/activities/{activityId}
+Delete an activity
+
+### Accommodations
+
+#### GET /api/travelplans/{id}/accommodations
+Get all accommodations for a travel plan
+
+#### POST /api/travelplans/{id}/accommodations
+Add an accommodation to a travel plan
+
+#### GET /api/travelplans/accommodations/{accommodationId}
+Get a specific accommodation
+
+#### PUT /api/travelplans/accommodations/{accommodationId}
+Update an accommodation
+
+#### DELETE /api/travelplans/accommodations/{accommodationId}
+Delete an accommodation
+
+### Transportation
+
+#### GET /api/travelplans/{id}/transportations
+Get all transportation for a travel plan
+
+#### POST /api/travelplans/{id}/transportations
+Add transportation to a travel plan
+
+#### GET /api/travelplans/transportations/{transportationId}
+Get a specific transportation
+
+#### PUT /api/travelplans/transportations/{transportationId}
+Update transportation
+
+#### DELETE /api/travelplans/transportations/{transportationId}
+Delete transportation
+
+## Data Models
+
+### TravelPlan
+- `Id`: Unique identifier
+- `Destination`: Travel destination
+- `Title`: Plan title
+- `StartDate`: Trip start date
+- `EndDate`: Trip end date
+- `Description`: Plan description
+- `AIRecommendations`: AI-generated recommendations
+- `Budget`: Total budget
+- `TravelStyle`: Travel style (Budget, Luxury, Adventure, Cultural)
+- `GroupSize`: Group size (Solo, Couple, Family, Group)
+- `IsPublic`: Whether the plan is public
+- `CreatedDate`: Creation timestamp
+- `UpdatedDate`: Last update timestamp
+
+### Activity
+- `Id`: Unique identifier
+- `TravelPlanId`: Associated travel plan ID
+- `Name`: Activity name
+- `Description`: Activity description
+- `ScheduledDate`: Scheduled date
+- `Duration`: Activity duration
+- `Location`: Activity location
+- `Cost`: Activity cost
+- `Category`: Activity category
+
+### Accommodation
+- `Id`: Unique identifier
+- `TravelPlanId`: Associated travel plan ID
+- `Name`: Accommodation name
+- `Description`: Accommodation description
+- `Address`: Accommodation address
+- `CheckInDate`: Check-in date
+- `CheckOutDate`: Check-out date
+- `CostPerNight`: Cost per night
+- `Type`: Accommodation type
+
+### Transportation
+- `Id`: Unique identifier
+- `TravelPlanId`: Associated travel plan ID
+- `Type`: Transportation type
+- `Provider`: Service provider
+- `FromLocation`: Departure location
+- `ToLocation`: Arrival location
+- `DepartureTime`: Departure time
+- `ArrivalTime`: Arrival time
+- `Cost`: Transportation cost
+- `Notes`: Additional notes
+
+## Database
+
+The application uses Entity Framework Core with SQL Server. The database will be created automatically when you first run the application.
+
+### Connection String
+Update the connection string in `appsettings.json`:
 ```json
 {
   "ConnectionStrings": {
@@ -96,7 +222,6 @@ Update the connection string in `AITravelPlanner.Api/appsettings.json`:
   }
 }
 ```
-
 #### Install Dependencies
 ```bash
 dotnet restore
