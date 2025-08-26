@@ -25,7 +25,7 @@ jobs:
 
       # 3. Restore project dependencies
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore AITravelPlanner/ai-travel-planner/backend
 
       # 4. Build the project
       - name: Build project
