@@ -340,12 +340,12 @@ namespace AITravelPlanner.Application.Services
 
         public async Task<bool> ValidateTokenAsync(string token)
         {
-            return _jwtService.ValidateToken(token);
+            return  await _jwtService.ValidateToken(token);
         }
 
         public async Task<int?> GetUserIdFromTokenAsync(string token)
         {
-            return _jwtService.GetUserIdFromToken(token);
+            return await _jwtService.GetUserIdFromToken(token);
         }
 
         // Private helper methods
