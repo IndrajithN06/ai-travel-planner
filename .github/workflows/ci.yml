@@ -37,6 +37,6 @@ jobs:
 
       # 6. Publish the project (optional)
       - name: Publish project
-        run: dotnet publish ai-travel-planner/backend/AITravelPlanner.sln --configuration Release --output ./publish
+        run: dotnet publish backend  --configuration Release --output ./publish
 
 
