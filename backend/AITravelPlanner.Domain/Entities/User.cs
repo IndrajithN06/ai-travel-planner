@@ -9,6 +9,8 @@ namespace AITravelPlanner.Domain.Entities
     {
         public int Id { get; set; }
 
+        public string Username { get; set; } = string.Empty;
+
         [Required]
         [MaxLength(100)]
         public string FirstName { get; set; } = string.Empty;
@@ -38,7 +40,7 @@ namespace AITravelPlanner.Domain.Entities
         public DateTime DateOfBirth { get; set; }
 
         [MaxLength(10)]
-        public string Gender { get; set; } = string.Empty; // Male, Female, Other
+        public string Gender { get; set; } = string.Empty;
 
         public bool IsEmailVerified { get; set; } = false;
 
@@ -53,8 +55,12 @@ namespace AITravelPlanner.Domain.Entities
         // Navigation properties
         public virtual ICollection<TravelPlan> TravelPlans { get; set; } = new List<TravelPlan>();
 
-        // Computed property for full name
+        // Computed property for full name (Not mapped to DB)
         [NotMapped]
-        public string FullName => $"{FirstName} {LastName}".Trim();
+        public string FullName
+        {
+            get => $"{FirstName} {LastName}".Trim();
+            private set { /* private setter to satisfy EF Core design-time */ }
+        }
     }
-} 
+}

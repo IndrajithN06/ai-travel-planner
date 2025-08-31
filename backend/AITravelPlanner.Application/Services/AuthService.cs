@@ -38,6 +38,7 @@ namespace AITravelPlanner.Application.Services
                 // Create new user
                 var user = new User
                 {
+                    Username=request.Username,
                     FirstName = request.FirstName,
                     LastName = request.LastName,
                     Email = request.Email,

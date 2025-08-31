@@ -67,7 +67,7 @@ namespace AITravelPlanner.Infrastructure.Repositories
                 .Include(tp => tp.Activities)
                 .Include(tp => tp.Accommodations)
                 .Include(tp => tp.Transportations)
-                .Where(tp => tp.Destination.Contains(destination, StringComparison.OrdinalIgnoreCase))
+                .Where(tp => EF.Functions.Like(tp.Destination, $"%{destination}%"))
                 .OrderByDescending(tp => tp.CreatedDate)
                 .ToListAsync();
         }
