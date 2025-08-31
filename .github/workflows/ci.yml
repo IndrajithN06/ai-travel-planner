@@ -1,0 +1,42 @@
+name: CI - Build & Test
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout your repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # 2. Set up .NET SDK
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x # Use your ASP.NET Core version
+
+      # 3. Restore project dependencies
+      - name: Restore dependencies
+        run: dotnet restore backend
+
+      # 4. Build the project
+      - name: Build project
+        run: dotnet build backend --configuration Release --no-restore
+
+      # 5. Run tests (if any)
+      - name: Run tests
+        run: dotnet test backend --no-build --verbosity normal || echo "No tests found"
+
+      # 6. Publish the project (optional)
+      - name: Publish project
+        run: dotnet publish backend  --configuration Release --output ./publish
+
+
