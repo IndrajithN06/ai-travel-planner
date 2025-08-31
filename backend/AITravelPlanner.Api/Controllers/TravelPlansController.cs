@@ -45,7 +45,7 @@ namespace AITravelPlanner.Api.Controllers
 
             return Ok(travelPlan);
         }
-
+        [AllowAnonymous]
         // GET: api/travelplans/destination/{destination}
         [HttpGet("destination/{destination}")]
         public async Task<ActionResult<IEnumerable<TravelPlanResponse>>> GetTravelPlansByDestination(string destination)

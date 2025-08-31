@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AITravelPlanner.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250824143317_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250831154818_UpdateTrainAndConfigurations")]
+    partial class UpdateTrainAndConfigurations
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -34,8 +34,9 @@ namespace AITravelPlanner.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<DateTime>("CheckInDate")
                         .HasColumnType("datetime2");
@@ -47,8 +48,7 @@ namespace AITravelPlanner.Infrastructure.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Description")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -59,6 +59,7 @@ namespace AITravelPlanner.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Type")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -67,32 +68,6 @@ namespace AITravelPlanner.Infrastructure.Migrations
                     b.HasIndex("TravelPlanId");
 
                     b.ToTable("Accommodations");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Address = "15 Place Vendôme, 75001 Paris, France",
-                            CheckInDate = new DateTime(2024, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CheckOutDate = new DateTime(2024, 6, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CostPerNight = 800m,
-                            Description = "Luxury hotel in the heart of Paris",
-                            Name = "Hotel Ritz Paris",
-                            TravelPlanId = 1,
-                            Type = "Hotel"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Address = "Shibuya, Tokyo, Japan",
-                            CheckInDate = new DateTime(2024, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CheckOutDate = new DateTime(2024, 7, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            CostPerNight = 50m,
-                            Description = "Traditional Japanese capsule hotel experience",
-                            Name = "Capsule Hotel",
-                            TravelPlanId = 2,
-                            Type = "Hostel"
-                        });
                 });
 
             modelBuilder.Entity("AITravelPlanner.Domain.Entities.Activity", b =>
@@ -104,29 +79,28 @@ namespace AITravelPlanner.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Category")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal?>("Cost")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Description")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
 
-                    b.Property<TimeSpan?>("Duration")
+                    b.Property<TimeSpan>("Duration")
                         .HasColumnType("time");
 
                     b.Property<string>("Location")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<DateTime?>("ScheduledDate")
+                    b.Property<DateTime>("ScheduledDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("TravelPlanId")
@@ -137,44 +111,173 @@ namespace AITravelPlanner.Infrastructure.Migrations
                     b.HasIndex("TravelPlanId");
 
                     b.ToTable("Activities");
+                });
 
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Category = "Sightseeing",
-                            Cost = 30m,
-                            Description = "Visit the iconic Eiffel Tower",
-                            Duration = new TimeSpan(0, 2, 0, 0, 0),
-                            Location = "Eiffel Tower, Paris",
-                            Name = "Eiffel Tower Visit",
-                            ScheduledDate = new DateTime(2024, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            TravelPlanId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Category = "Culture",
-                            Cost = 17m,
-                            Description = "Explore the world's largest art museum",
-                            Duration = new TimeSpan(0, 3, 0, 0, 0),
-                            Location = "Louvre Museum, Paris",
-                            Name = "Louvre Museum",
-                            ScheduledDate = new DateTime(2024, 6, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            TravelPlanId = 1
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Category = "Sightseeing",
-                            Cost = 0m,
-                            Description = "Experience the world's busiest pedestrian crossing",
-                            Duration = new TimeSpan(0, 1, 0, 0, 0),
-                            Location = "Shibuya, Tokyo",
-                            Name = "Shibuya Crossing",
-                            ScheduledDate = new DateTime(2024, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            TravelPlanId = 2
-                        });
+            modelBuilder.Entity("AITravelPlanner.Domain.Entities.Bus", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("ArrivalTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("BusName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("DepartureTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FromLocation")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("ToLocation")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Buses");
+                });
+
+            modelBuilder.Entity("AITravelPlanner.Domain.Entities.Flight", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Airline")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("ArrivalTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DepartureTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FlightNumber")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("FromLocation")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("ToLocation")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Flights");
+                });
+
+            modelBuilder.Entity("AITravelPlanner.Domain.Entities.Hotel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<DateTime>("AvailableFrom")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("AvailableRooms")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("AvailableTo")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool>("IsAvailable")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<decimal>("PricePerNight")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Hotels");
+                });
+
+            modelBuilder.Entity("AITravelPlanner.Domain.Entities.Train", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("ArrivalTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DepartureDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DepartureTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FromLocation")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("ToLocation")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("TrainName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("TrainNumber")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Trains");
                 });
 
             modelBuilder.Entity("AITravelPlanner.Domain.Entities.Transportation", b =>
@@ -185,72 +288,45 @@ namespace AITravelPlanner.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime?>("ArrivalTime")
+                    b.Property<DateTime>("ArrivalTime")
+                        .HasMaxLength(200)
                         .HasColumnType("datetime2");
 
                     b.Property<decimal?>("Cost")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<DateTime?>("DepartureTime")
+                    b.Property<DateTime>("DepartureTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("FromLocation")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("Notes")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Provider")
+                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("ToLocation")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("TravelPlanId")
                         .HasColumnType("int");
 
                     b.Property<string>("Type")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("TravelPlanId");
 
                     b.ToTable("Transportations");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ArrivalTime = new DateTime(2024, 6, 1, 22, 0, 0, 0, DateTimeKind.Unspecified),
-                            Cost = 800m,
-                            DepartureTime = new DateTime(2024, 6, 1, 10, 0, 0, 0, DateTimeKind.Unspecified),
-                            FromLocation = "New York",
-                            Notes = "Direct flight to Charles de Gaulle Airport",
-                            Provider = "Air France",
-                            ToLocation = "Paris",
-                            TravelPlanId = 1,
-                            Type = "Flight"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            ArrivalTime = new DateTime(2024, 7, 2, 16, 0, 0, 0, DateTimeKind.Unspecified),
-                            Cost = 1200m,
-                            DepartureTime = new DateTime(2024, 7, 1, 12, 0, 0, 0, DateTimeKind.Unspecified),
-                            FromLocation = "Los Angeles",
-                            Notes = "Direct flight to Narita Airport",
-                            Provider = "Japan Airlines",
-                            ToLocation = "Tokyo",
-                            TravelPlanId = 2,
-                            Type = "Flight"
-                        });
                 });
 
             modelBuilder.Entity("AITravelPlanner.Domain.Entities.TravelPlan", b =>
@@ -290,7 +366,9 @@ namespace AITravelPlanner.Infrastructure.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<bool>("IsPublic")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
@@ -315,36 +393,6 @@ namespace AITravelPlanner.Infrastructure.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("TravelPlans");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Budget = 5000m,
-                            CreatedDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            Description = "A romantic week in the City of Light",
-                            Destination = "Paris, France",
-                            EndDate = new DateTime(2024, 6, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            GroupSize = "Couple",
-                            IsPublic = true,
-                            StartDate = new DateTime(2024, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Title = "Romantic Paris Getaway",
-                            TravelStyle = "Luxury"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Budget = 3000m,
-                            CreatedDate = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            Description = "Exploring the vibrant culture of Tokyo",
-                            Destination = "Tokyo, Japan",
-                            EndDate = new DateTime(2024, 7, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            GroupSize = "Solo",
-                            IsPublic = true,
-                            StartDate = new DateTime(2024, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Title = "Tokyo Adventure",
-                            TravelStyle = "Adventure"
-                        });
                 });
 
             modelBuilder.Entity("AITravelPlanner.Domain.Entities.User", b =>
@@ -373,10 +421,15 @@ namespace AITravelPlanner.Infrastructure.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("FullName")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -412,10 +465,12 @@ namespace AITravelPlanner.Infrastructure.Migrations
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("Id");
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-                    b.HasIndex("Email")
-                        .IsUnique();
+                    b.HasKey("Id");
 
                     b.ToTable("Users");
                 });
