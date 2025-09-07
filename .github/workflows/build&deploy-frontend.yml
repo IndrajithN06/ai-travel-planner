@@ -3,7 +3,7 @@ name: Deploy Angular Frontend
 on:
   push:
     branches:
-      - main  # Deploy when main branch is updated
+      - main  # Trigger on push to main
 
 jobs:
   build-and-deploy:
@@ -27,12 +27,7 @@ jobs:
 
       # 4. Build Angular app
       - name: Build Angular app
-        run: |
-          set -e
-          # Get Angular output path dynamically from angular.json
-          DIST_DIR=$(node -p "require('angular.json').projects[Object.keys(require('angular.json').projects)[0]].architect.build.options.outputPath")
-          echo "Angular dist folder: $DIST_DIR"
-          npm run build -- --output-path=$DIST_DIR --base-href=/ai-travel-planner/
+        run: npm run build -- --output-path=dist/frontend --base-href=/ai-travel-planner/
         working-directory: ./frontend
 
       # 5. Deploy to GitHub Pages
@@ -40,4 +35,4 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./frontend/dist
+          publish_dir: ./frontend/dist/frontend
