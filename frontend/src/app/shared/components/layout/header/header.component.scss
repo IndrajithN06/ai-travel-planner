@@ -1,0 +1,105 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 22px 40px;
+  background-color: #3f51b5;
+  color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  transition: background-color 0.3s ease;
+
+  // Logo Styling
+  .logo {
+    font-size: 1.7rem;
+    font-weight: bold;
+    cursor: pointer;  // ✅ Pointer cursor for logo
+    letter-spacing: 0.5px;
+    transition: transform 0.2s ease, color 0.3s ease;
+
+    &:hover {
+      transform: scale(1.08);
+      color: #ffeb3b;
+    }
+  }
+
+  // Navigation Links
+  .nav-links {
+    display: flex;
+    gap: 40px;
+
+    a {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.15rem;
+      position: relative;
+      padding-bottom: 4px;
+      cursor: pointer; // ✅ Pointer cursor for nav links
+      transition: color 0.3s ease, transform 0.2s ease;
+
+      // Underline hover animation
+      &::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0%;
+        height: 2px;
+        background-color: #ffeb3b;
+        transition: width 0.3s ease;
+      }
+
+      &:hover,
+      &.active {
+        color: #ffeb3b;
+        transform: scale(1.05);
+
+        &::after {
+          width: 100%;
+        }
+      }
+    }
+  }
+
+  // Auth Buttons
+  .auth-buttons {
+    display: flex;
+    gap: 12px;
+
+    .login-btn,
+    .register-btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer; // ✅ Pointer cursor for buttons
+      font-weight: bold;
+      font-size: 1rem;
+      transition: background 0.3s ease, color 0.3s ease, transform 0.2s ease;
+    }
+
+    .login-btn {
+      background-color: white;
+      color: #3f51b5;
+
+      &:hover {
+        background-color: #f3f3f3;
+        transform: translateY(-2px);
+      }
+    }
+
+    .register-btn {
+      background-color: #ffeb3b;
+      color: #3f51b5;
+
+      &:hover {
+        background-color: #fdd835;
+        transform: translateY(-2px);
+      }
+    }
+  }
+}

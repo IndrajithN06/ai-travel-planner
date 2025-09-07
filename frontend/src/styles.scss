@@ -1,0 +1,20 @@
+/* Global Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Global Font */
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f8f9fa;
+  color: #333;
+}
+
+/* Main Content Layout */
+.main-content {
+  min-height: calc(100vh - 140px); /* header + footer height */
+  padding: 20px;
+  background-color: #f8f9fa;
+}
