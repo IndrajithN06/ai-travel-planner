@@ -1,0 +1,42 @@
+name: Deploy Angular Frontend
+
+on:
+  push:
+    branches:
+      - main  # Deploy when main branch is updated
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 2. Setup Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      # 3. Install frontend dependencies
+      - name: Install dependencies
+        run: npm install
+        working-directory: ./frontend
+
+      # 4. Build Angular app
+      - name: Build Angular app
+        run: |
+          # Get Angular output path dynamically from angular.json
+          DIST_DIR=$(node -p "require('./frontend/angular.json').projects[Object.keys(require('./frontend/angular.json').projects)[0]].architect.build.options.outputPath")
+          echo "Angular dist folder: $DIST_DIR"
+          npm run build -- --output-path=$DIST_DIR --base-href=/ai-travel-planner/
+        working-directory: ./frontend
+
+      # 5. Deploy to GitHub Pages
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v6
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./frontend/$(node -p "require('./frontend/angular.json').projects[Object.keys(require('./frontend/angular.json').projects)[0]].architect.build.options.outputPath")
