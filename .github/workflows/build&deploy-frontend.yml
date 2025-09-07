@@ -28,8 +28,9 @@ jobs:
       # 4. Build Angular app
       - name: Build Angular app
         run: |
+          set -e
           # Get Angular output path dynamically from angular.json
-          DIST_DIR=$(node -p "require('./frontend/angular.json').projects[Object.keys(require('./frontend/angular.json').projects)[0]].architect.build.options.outputPath")
+          DIST_DIR=$(node -p "require('angular.json').projects[Object.keys(require('angular.json').projects)[0]].architect.build.options.outputPath")
           echo "Angular dist folder: $DIST_DIR"
           npm run build -- --output-path=$DIST_DIR --base-href=/ai-travel-planner/
         working-directory: ./frontend
@@ -39,4 +40,4 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./frontend/$(node -p "require('./frontend/angular.json').projects[Object.keys(require('./frontend/angular.json').projects)[0]].architect.build.options.outputPath")
+          publish_dir: ./frontend/dist
