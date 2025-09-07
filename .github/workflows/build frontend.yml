@@ -1,12 +1,12 @@
-name: Deploy Angular Frontend
+name: Build Angular Frontend
 
 on:
   push:
     branches:
-      - main  # Trigger on push to main
+      - main  # Trigger build on push to main
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -29,12 +29,3 @@ jobs:
       - name: Build Angular app
         run: npm run build -- --output-path=dist/frontend --base-href=/ai-travel-planner/
         working-directory: ./frontend
-
-      # 5. Deploy to GitHub Pages
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./frontend/dist/frontend
-          force_orphan: true  # ensures a clean branch is created
-          clean: true         # removes old files before deploying
