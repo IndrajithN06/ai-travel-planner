@@ -36,3 +36,5 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./frontend/dist/frontend
+          force_orphan: true  # ensures a clean branch is created
+          clean: true         # removes old files before deploying
