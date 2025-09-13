@@ -1,0 +1,44 @@
+<mat-toolbar color="primary" class="header-toolbar">
+  <div class="header-content">
+    <!-- Logo/Brand -->
+    <div class="brand-section" (click)="navigateToHome()">
+      <mat-icon class="brand-icon">travel_explore</mat-icon>
+      <span class="brand-text">AI Travel Planner</span>
+    </div>
+
+    <!-- Navigation Actions -->
+    <div class="nav-actions">
+      <!-- Authenticated User Menu -->
+      <div *ngIf="isAuthenticated" class="user-menu">
+        <button mat-icon-button [matMenuTriggerFor]="userMenu" class="user-button">
+          <mat-icon>account_circle</mat-icon>
+        </button>
+        <mat-menu #userMenu="matMenu" class="user-dropdown">
+          <div class="user-info">
+            <div class="user-name">{{ currentUser?.fullName || 'User' }}</div>
+            <div class="user-email">{{ currentUser?.email }}</div>
+          </div>
+          <mat-divider></mat-divider>
+          <button mat-menu-item (click)="navigateToDashboard()">
+            <mat-icon>dashboard</mat-icon>
+            <span>Dashboard</span>
+          </button>
+          <button mat-menu-item (click)="logout()">
+            <mat-icon>logout</mat-icon>
+            <span>Logout</span>
+          </button>
+        </mat-menu>
+      </div>
+
+      <!-- Guest User Actions -->
+      <div *ngIf="!isAuthenticated" class="guest-actions">
+        <button mat-button (click)="navigateToLogin()" class="login-button">
+          Login
+        </button>
+        <button mat-flat-button color="accent" (click)="navigateToSignup()" class="signup-button">
+          Sign Up
+        </button>
+      </div>
+    </div>
+  </div>
+</mat-toolbar>

@@ -1,0 +1,231 @@
+<div class="signup-container">
+  <div class="signup-card">
+    <mat-card class="auth-card">
+      <mat-card-header class="auth-header">
+        <mat-card-title class="auth-title">
+          <mat-icon class="auth-icon">person_add</mat-icon>
+          Create Account
+        </mat-card-title>
+        <mat-card-subtitle class="auth-subtitle">
+          Join AI Travel Planner and start planning your perfect trips
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content class="auth-content">
+        <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="auth-form">
+          <!-- Personal Information Section -->
+          <div class="form-section">
+            <h3 class="section-title">Personal Information</h3>
+            
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="half-width">
+                <mat-label>First Name</mat-label>
+                <input 
+                  matInput 
+                  formControlName="firstName"
+                  placeholder="Enter your first name"
+                  autocomplete="given-name">
+                <mat-icon matSuffix>person</mat-icon>
+                <mat-error *ngIf="signupForm.get('firstName')?.invalid && signupForm.get('firstName')?.touched">
+                  {{ getErrorMessage('firstName') }}
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="half-width">
+                <mat-label>Last Name</mat-label>
+                <input 
+                  matInput 
+                  formControlName="lastName"
+                  placeholder="Enter your last name"
+                  autocomplete="family-name">
+                <mat-icon matSuffix>person</mat-icon>
+                <mat-error *ngIf="signupForm.get('lastName')?.invalid && signupForm.get('lastName')?.touched">
+                  {{ getErrorMessage('lastName') }}
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Username</mat-label>
+              <input 
+                matInput 
+                formControlName="username"
+                placeholder="Choose a username"
+                autocomplete="username">
+              <mat-icon matSuffix>alternate_email</mat-icon>
+              <mat-error *ngIf="signupForm.get('username')?.invalid && signupForm.get('username')?.touched">
+                {{ getErrorMessage('username') }}
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Email</mat-label>
+              <input 
+                matInput 
+                type="email"
+                formControlName="email"
+                placeholder="Enter your email address"
+                autocomplete="email">
+              <mat-icon matSuffix>email</mat-icon>
+              <mat-error *ngIf="signupForm.get('email')?.invalid && signupForm.get('email')?.touched">
+                {{ getErrorMessage('email') }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <!-- Security Section -->
+          <div class="form-section">
+            <h3 class="section-title">Security</h3>
+            
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Password</mat-label>
+              <input 
+                matInput 
+                [type]="hidePassword ? 'password' : 'text'"
+                formControlName="password"
+                placeholder="Create a strong password"
+                autocomplete="new-password">
+              <button 
+                mat-icon-button 
+                matSuffix 
+                type="button"
+                (click)="hidePassword = !hidePassword"
+                [attr.aria-label]="'Hide password'"
+                [attr.aria-pressed]="hidePassword">
+                <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+              </button>
+              <mat-error *ngIf="signupForm.get('password')?.invalid && signupForm.get('password')?.touched">
+                {{ getErrorMessage('password') }}
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Confirm Password</mat-label>
+              <input 
+                matInput 
+                [type]="hideConfirmPassword ? 'password' : 'text'"
+                formControlName="confirmPassword"
+                placeholder="Confirm your password"
+                autocomplete="new-password">
+              <button 
+                mat-icon-button 
+                matSuffix 
+                type="button"
+                (click)="hideConfirmPassword = !hideConfirmPassword"
+                [attr.aria-label]="'Hide password'"
+                [attr.aria-pressed]="hideConfirmPassword">
+                <mat-icon>{{ hideConfirmPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+              </button>
+              <mat-error *ngIf="getPasswordMismatchError()">
+                {{ getPasswordMismatchError() }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <!-- Additional Information Section -->
+          <div class="form-section">
+            <h3 class="section-title">Additional Information (Optional)</h3>
+            
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="half-width">
+                <mat-label>Date of Birth</mat-label>
+                <input 
+                  matInput 
+                  [matDatepicker]="picker"
+                  [max]="maxDate"
+                  formControlName="dateOfBirth"
+                  placeholder="Select your date of birth"
+                  readonly>
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+                <mat-error *ngIf="signupForm.get('dateOfBirth')?.invalid && signupForm.get('dateOfBirth')?.touched">
+                  {{ getErrorMessage('dateOfBirth') }}
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="half-width">
+                <mat-label>Gender</mat-label>
+                <mat-select formControlName="gender" placeholder="Select gender">
+                  <mat-option *ngFor="let option of genderOptions" [value]="option.value">
+                    {{ option.label }}
+                  </mat-option>
+                </mat-select>
+                <mat-icon matSuffix>person_outline</mat-icon>
+                <mat-error *ngIf="signupForm.get('gender')?.invalid && signupForm.get('gender')?.touched">
+                  {{ getErrorMessage('gender') }}
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Phone Number</mat-label>
+              <input 
+                matInput 
+                type="tel"
+                formControlName="phoneNumber"
+                placeholder="Enter your phone number (optional)"
+                autocomplete="tel">
+              <mat-icon matSuffix>phone</mat-icon>
+              <mat-error *ngIf="signupForm.get('phoneNumber')?.invalid && signupForm.get('phoneNumber')?.touched">
+                {{ getErrorMessage('phoneNumber') }}
+              </mat-error>
+            </mat-form-field>
+
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="half-width">
+                <mat-label>Country</mat-label>
+                <input 
+                  matInput 
+                  formControlName="country"
+                  placeholder="Enter your country (optional)"
+                  autocomplete="country">
+                <mat-icon matSuffix>public</mat-icon>
+                <mat-error *ngIf="signupForm.get('country')?.invalid && signupForm.get('country')?.touched">
+                  {{ getErrorMessage('country') }}
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="half-width">
+                <mat-label>City</mat-label>
+                <input 
+                  matInput 
+                  formControlName="city"
+                  placeholder="Enter your city (optional)"
+                  autocomplete="address-level2">
+                <mat-icon matSuffix>location_city</mat-icon>
+                <mat-error *ngIf="signupForm.get('city')?.invalid && signupForm.get('city')?.touched">
+                  {{ getErrorMessage('city') }}
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button 
+              mat-flat-button 
+              color="primary" 
+              type="submit"
+              class="signup-button"
+              [disabled]="isLoading || signupForm.invalid">
+              <mat-spinner *ngIf="isLoading" diameter="20" class="button-spinner"></mat-spinner>
+              <span *ngIf="!isLoading">Create Account</span>
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+
+      <mat-card-actions class="auth-actions">
+        <div class="login-prompt">
+          <span>Already have an account?</span>
+          <button 
+            mat-button 
+            color="primary"
+            type="button"
+            (click)="navigateToLogin()">
+            Sign In
+          </button>
+        </div>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>

@@ -28,7 +28,7 @@ public class AuthController : ControllerBase
         Ok(await _authService.RefreshTokenAsync(request));
 
     [HttpPost("logout")]
-    [Authorize]
+    [AllowAnonymous]
     public async Task<IActionResult> Logout([FromBody] RefreshTokenRequest request) =>
         Ok(await _authService.LogoutAsync(request.RefreshToken));
 
