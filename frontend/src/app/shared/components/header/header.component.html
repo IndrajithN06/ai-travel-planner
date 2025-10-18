@@ -23,6 +23,15 @@
             <mat-icon>dashboard</mat-icon>
             <span>Dashboard</span>
           </button>
+          <button mat-menu-item (click)="navigateToTravelPlans()">
+            <mat-icon>travel_explore</mat-icon>
+            <span>My Travel Plans</span>
+          </button>
+          <button mat-menu-item (click)="navigateToTravelDemo()">
+            <mat-icon>auto_awesome</mat-icon>
+            <span>Travel Demo</span>
+          </button>
+          <mat-divider></mat-divider>
           <button mat-menu-item (click)="logout()">
             <mat-icon>logout</mat-icon>
             <span>Logout</span>

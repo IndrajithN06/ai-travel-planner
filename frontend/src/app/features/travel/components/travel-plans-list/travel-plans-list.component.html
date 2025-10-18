@@ -1,0 +1,164 @@
+<div class="travel-plans-container">
+  <!-- Header Section -->
+  <div class="header-section">
+    <div class="header-content">
+      <div class="title-section">
+        <h1>Travel Plans</h1>
+        <p class="subtitle">Discover and manage your travel adventures</p>
+      </div>
+      
+      <div class="header-actions">
+        <button mat-flat-button color="primary" (click)="onCreateNewPlan()" class="create-button">
+          <mat-icon>add</mat-icon>
+          Create New Plan
+        </button>
+        <button mat-icon-button (click)="onRefresh()" matTooltip="Refresh">
+          <mat-icon>refresh</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filters Section -->
+  <mat-card class="filters-card">
+    <mat-card-content>
+      <div class="filters-header">
+        <h3>Filters</h3>
+        <div class="filter-actions">
+          <button mat-button (click)="onClearFilters()" [disabled]="!hasActiveFilters">
+            <mat-icon>clear</mat-icon>
+            Clear Filters
+          </button>
+          <button mat-button (click)="onTogglePublicOnly()" [color]="showPublicOnly ? 'primary' : ''">
+            <mat-icon>{{ showPublicOnly ? 'public' : 'public_off' }}</mat-icon>
+            {{ showPublicOnly ? 'Show All' : 'Public Only' }}
+          </button>
+        </div>
+      </div>
+
+      <form [formGroup]="filterForm" class="filters-form">
+        <div class="filters-grid">
+          <!-- Search -->
+          <mat-form-field appearance="outline" class="search-field">
+            <mat-label>Search plans</mat-label>
+            <input matInput formControlName="search" placeholder="Search by title, destination, or description">
+            <mat-icon matSuffix>search</mat-icon>
+          </mat-form-field>
+
+          <!-- Travel Style -->
+          <mat-form-field appearance="outline">
+            <mat-label>Travel Style</mat-label>
+            <mat-select formControlName="travelStyle">
+              <mat-option value="">All Styles</mat-option>
+              <mat-option *ngFor="let style of travelStyles" [value]="style">
+                {{ style }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <!-- Group Size -->
+          <mat-form-field appearance="outline">
+            <mat-label>Group Size</mat-label>
+            <mat-select formControlName="groupSize">
+              <mat-option value="">All Sizes</mat-option>
+              <mat-option *ngFor="let size of groupSizes" [value]="size">
+                {{ size }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <!-- Date Range -->
+          <mat-form-field appearance="outline">
+            <mat-label>Start Date</mat-label>
+            <input matInput type="date" formControlName="startDate">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>End Date</mat-label>
+            <input matInput type="date" formControlName="endDate">
+          </mat-form-field>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Results Section -->
+  <div class="results-section">
+    <div class="results-header">
+      <div class="results-info">
+        <h3>{{ resultCount }} Travel Plan{{ resultCount !== 1 ? 's' : '' }} Found</h3>
+        <p *ngIf="hasActiveFilters" class="filter-info">Filtered results</p>
+      </div>
+      
+      <div class="view-controls">
+        <button mat-icon-button 
+                [class.active]="viewMode === 'grid'" 
+                (click)="viewMode = 'grid'"
+                matTooltip="Grid View">
+          <mat-icon>grid_view</mat-icon>
+        </button>
+        <button mat-icon-button 
+                [class.active]="viewMode === 'list'" 
+                (click)="viewMode = 'list'"
+                matTooltip="List View">
+          <mat-icon>list</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="loading" class="loading-container">
+      <mat-spinner diameter="50"></mat-spinner>
+      <p>Loading travel plans...</p>
+    </div>
+
+    <!-- Error State with Sample Data -->
+    <div *ngIf="error && !loading" class="warning-container">
+      <div class="warning-header">
+        <mat-icon class="warning-icon">info</mat-icon>
+        <h3>Demo Mode</h3>
+      </div>
+      <p>{{ error }}</p>
+      <div class="warning-actions">
+        <button mat-flat-button color="primary" (click)="onRefresh()">
+          <mat-icon>refresh</mat-icon>
+          Try Again
+        </button>
+        <button mat-button color="accent" (click)="navigateToDemo()">
+          <mat-icon>auto_awesome</mat-icon>
+          View Demo
+        </button>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!loading && !error && filteredPlans.length === 0" class="empty-container">
+      <mat-icon class="empty-icon">explore_off</mat-icon>
+      <h3>No travel plans found</h3>
+      <p *ngIf="hasActiveFilters">Try adjusting your filters or create a new travel plan.</p>
+      <p *ngIf="!hasActiveFilters">Start by creating your first travel plan!</p>
+      <button mat-flat-button color="primary" (click)="onCreateNewPlan()">
+        <mat-icon>add</mat-icon>
+        Create Your First Plan
+      </button>
+    </div>
+
+    <!-- Travel Plans Grid/List -->
+    <div *ngIf="!loading && !error && filteredPlans.length > 0" 
+         class="plans-container" 
+         [class.grid-view]="viewMode === 'grid'"
+         [class.list-view]="viewMode === 'list'">
+      
+      <app-trip-card 
+        *ngFor="let plan of filteredPlans" 
+        [travelPlan]="plan"
+        [showActions]="true"
+        (viewDetails)="onViewDetails($event)"
+        (editPlan)="onEditPlan($event)"
+        (deletePlan)="onDeletePlan($event)"
+        (sharePlan)="onSharePlan($event)"
+        class="plan-item">
+      </app-trip-card>
+    </div>
+  </div>
+</div>

@@ -1,1 +1,99 @@
-<p>trip-card works!</p>
+<mat-card class="trip-card" [class.public-plan]="travelPlan.isPublic">
+  <!-- Card Header with Destination Image Placeholder -->
+  <div class="card-header">
+    <div class="destination-image">
+      <mat-icon class="destination-icon">place</mat-icon>
+    </div>
+    <div class="header-overlay">
+      <div class="public-badge" *ngIf="travelPlan.isPublic">
+        <mat-icon>public</mat-icon>
+        <span>Public</span>
+      </div>
+      <div class="ai-badge" *ngIf="travelPlan.aiRecommendations">
+        <mat-icon>auto_awesome</mat-icon>
+        <span>AI Generated</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card Content -->
+  <mat-card-content class="card-content">
+    <!-- Title and Destination -->
+    <div class="title-section">
+      <h3 class="trip-title">{{ travelPlan.title }}</h3>
+      <p class="destination">
+        <mat-icon>place</mat-icon>
+        {{ travelPlan.destination }}
+      </p>
+    </div>
+
+    <!-- Description -->
+    <p class="description" *ngIf="travelPlan.description">
+      {{ travelPlan.description | slice:0:120 }}{{ travelPlan.description.length > 120 ? '...' : '' }}
+    </p>
+
+    <!-- Trip Details -->
+    <div class="trip-details">
+      <div class="detail-item">
+        <mat-icon>event</mat-icon>
+        <span>{{ duration }} days</span>
+      </div>
+      <div class="detail-item">
+        <mat-icon>date_range</mat-icon>
+        <span>{{ formattedDateRange }}</span>
+      </div>
+      <div class="detail-item" *ngIf="travelPlan.budget">
+        <mat-icon>attach_money</mat-icon>
+        <span>{{ budgetDisplay }}</span>
+      </div>
+    </div>
+
+    <!-- Chips for Travel Style and Group Size -->
+    <div class="chips-section">
+      <mat-chip-set>
+        <mat-chip *ngIf="travelPlan.travelStyle" class="style-chip">
+          <mat-icon>{{ travelStyleIcon }}</mat-icon>
+          {{ travelPlan.travelStyle }}
+        </mat-chip>
+        <mat-chip *ngIf="travelPlan.groupSize" class="group-chip">
+          <mat-icon>{{ groupSizeIcon }}</mat-icon>
+          {{ travelPlan.groupSize }}
+        </mat-chip>
+      </mat-chip-set>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="stats-section">
+      <div class="stat-item" *ngIf="travelPlan.activities.length > 0">
+        <mat-icon>event_available</mat-icon>
+        <span>{{ travelPlan.activities.length }} Activities</span>
+      </div>
+      <div class="stat-item" *ngIf="travelPlan.accommodations.length > 0">
+        <mat-icon>hotel</mat-icon>
+        <span>{{ travelPlan.accommodations.length }} Hotels</span>
+      </div>
+      <div class="stat-item" *ngIf="travelPlan.transportations.length > 0">
+        <mat-icon>directions_transit</mat-icon>
+        <span>{{ travelPlan.transportations.length }} Transport</span>
+      </div>
+    </div>
+  </mat-card-content>
+
+  <!-- Card Actions -->
+  <mat-card-actions class="card-actions" *ngIf="showActions">
+    <button mat-button color="primary" (click)="onViewDetails()" class="action-button">
+      <mat-icon>visibility</mat-icon>
+      View Details
+    </button>
+    <button mat-button color="accent" (click)="onEditPlan()" class="action-button">
+      <mat-icon>edit</mat-icon>
+      Edit
+    </button>
+    <button mat-icon-button (click)="onSharePlan()" matTooltip="Share Plan">
+      <mat-icon>share</mat-icon>
+    </button>
+    <button mat-icon-button color="warn" (click)="onDeletePlan()" matTooltip="Delete Plan">
+      <mat-icon>delete</mat-icon>
+    </button>
+  </mat-card-actions>
+</mat-card>

@@ -61,6 +61,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
+  navigateToTravelPlans(): void {
+    this.router.navigate(['/travel/list']);
+  }
+
+  navigateToTravelDemo(): void {
+    this.router.navigate(['/travel/demo']);
+  }
+
   logout(): void {
     this.authService.logout().subscribe({
       next: () => {

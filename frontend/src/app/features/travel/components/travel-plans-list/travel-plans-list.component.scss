@@ -1,0 +1,249 @@
+.travel-plans-container {
+  font-family: 'Roboto', sans-serif;
+  padding: 2rem;
+  background-color: #f5f5f5;
+  color: #333;
+
+  // Header Section
+  .header-section {
+    margin-bottom: 1.5rem;
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+
+      .title-section {
+        h1 {
+          font-size: 2rem;
+          margin: 0;
+          font-weight: 500;
+        }
+        .subtitle {
+          font-size: 1rem;
+          color: #666;
+        }
+      }
+
+      .header-actions {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+
+        button.create-button {
+          display: flex;
+          align-items: center;
+          gap: 0.25rem;
+        }
+      }
+    }
+  }
+
+  // Filters Card
+  .filters-card {
+    margin-bottom: 2rem;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
+
+    .filters-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+
+      h3 {
+        margin: 0;
+      }
+
+      .filter-actions {
+        display: flex;
+        gap: 0.5rem;
+      }
+    }
+
+    .filters-form {
+      .filters-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+      }
+    }
+  }
+
+  // Results Section (Enhanced)
+  .results-section {
+    background-color: #ffffff;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+    .results-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+
+      .results-info {
+        h3 {
+          margin: 0;
+          font-weight: 600;
+          font-size: 1.25rem;
+          color: #1e1e1e;
+        }
+
+        .filter-info {
+          font-size: 0.875rem;
+          color: #555;
+          margin-top: 0.25rem;
+        }
+      }
+
+      .view-controls {
+        button {
+          margin-left: 0.5rem;
+          color: #888;
+          transition: all 0.2s ease;
+
+          &.active {
+            color: #1976d2;
+            background-color: rgba(25, 118, 210, 0.1);
+            border-radius: 6px;
+          }
+
+          &:hover {
+            background-color: rgba(0, 0, 0, 0.03);
+          }
+        }
+      }
+    }
+
+    // Loading State
+    .loading-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem 0;
+
+      p {
+        margin-top: 1rem;
+        color: #666;
+        font-size: 0.95rem;
+      }
+    }
+
+    // Warning / Error State
+    .warning-container {
+      background-color: #fff4e5;
+      border-left: 5px solid #ff9800;
+      padding: 1rem 1.5rem;
+      border-radius: 8px;
+      margin: 1rem 0;
+      transition: background 0.3s ease;
+
+      .warning-header {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+
+        .warning-icon {
+          color: #ff9800;
+          font-size: 1.5rem;
+        }
+
+        h3 {
+          margin: 0;
+          font-weight: 500;
+        }
+      }
+
+      p {
+        margin: 0.5rem 0;
+        color: #555;
+      }
+
+      .warning-actions {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 0.75rem;
+
+        button {
+          display: flex;
+          align-items: center;
+          gap: 0.25rem;
+        }
+      }
+    }
+
+    // Empty State
+    .empty-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 2rem 0;
+      color: #999;
+
+      .empty-icon {
+        font-size: 4.5rem;
+        margin-bottom: 1rem;
+        color: #ccc;
+      }
+
+      h3 {
+        margin: 0.5rem 0;
+        font-weight: 500;
+        color: #555;
+      }
+
+      p {
+        margin: 0.25rem 0;
+        font-size: 0.9rem;
+      }
+
+      button {
+        margin-top: 1rem;
+      }
+    }
+
+    // Travel Plans Grid/List
+    .plans-container {
+      display: grid;
+      gap: 1rem;
+
+      &.grid-view {
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      }
+
+      &.list-view {
+        grid-template-columns: 1fr;
+      }
+
+      .plan-item {
+        background-color: #fafafa;
+        border-radius: 10px;
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+        &:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+        }
+      }
+    }
+
+    // Responsive tweaks
+    @media (max-width: 768px) {
+      .results-header {
+        flex-direction: column;
+        align-items: flex-start;
+
+        .view-controls {
+          margin-top: 0.5rem;
+        }
+      }
+    }
+  }
+}
