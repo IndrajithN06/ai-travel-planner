@@ -72,6 +72,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.router.navigate(['/dashboard']);
   }
 
+  navigateToTravelPlans(): void {
+    this.router.navigate(['/travel/list']);
+  }
+
+  navigateToTravelDemo(): void {
+    this.router.navigate(['/travel/demo']);
+  }
+
   logout(): void {
     this.authService.logout().subscribe({
       next: () => {

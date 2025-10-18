@@ -17,6 +17,11 @@ export const routes: Routes = [
     ]
   },
   { 
+    path: 'travel', 
+    loadChildren: () => import('./features/travel/travel.routes').then(m => m.travelRoutes),
+    canActivate: [AuthGuard]
+  },
+  { 
     path: 'dashboard', 
     loadChildren: () => import('./features/dashboard/dashboard.routes').then(m => m.dashboardRoutes),
     canActivate: [AuthGuard]

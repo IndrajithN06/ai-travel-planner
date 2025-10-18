@@ -1,0 +1,55 @@
+<div class="demo-container">
+  <div class="demo-header">
+    <h1>Travel Plan Cards Demo</h1>
+    <p>Beautiful, modern travel plan cards with comprehensive information and interactive features</p>
+  </div>
+
+  <div class="cards-grid">
+    <app-trip-card 
+      *ngFor="let plan of sampleTravelPlans" 
+      [travelPlan]="plan"
+      [showActions]="true"
+      (viewDetails)="onViewDetails($event)"
+      (editPlan)="onEditPlan($event)"
+      (deletePlan)="onDeletePlan($event)"
+      (sharePlan)="onSharePlan($event)"
+      class="demo-card">
+    </app-trip-card>
+  </div>
+
+  <div class="demo-features">
+    <h2>Features Showcased</h2>
+    <div class="features-grid">
+      <div class="feature-item">
+        <mat-icon>palette</mat-icon>
+        <h3>Modern Design</h3>
+        <p>Beautiful gradient headers, smooth animations, and responsive layout</p>
+      </div>
+      <div class="feature-item">
+        <mat-icon>info</mat-icon>
+        <h3>Rich Information</h3>
+        <p>Comprehensive trip details including activities, accommodations, and transportation</p>
+      </div>
+      <div class="feature-item">
+        <mat-icon>label</mat-icon>
+        <h3>Smart Badges</h3>
+        <p>AI-generated badges, public/private indicators, and travel style chips</p>
+      </div>
+      <div class="feature-item">
+        <mat-icon>touch_app</mat-icon>
+        <h3>Interactive Actions</h3>
+        <p>View, edit, share, and delete functionality with smooth user feedback</p>
+      </div>
+      <div class="feature-item">
+        <mat-icon>phone_android</mat-icon>
+        <h3>Responsive</h3>
+        <p>Optimized for all screen sizes with mobile-first design approach</p>
+      </div>
+      <div class="feature-item">
+        <mat-icon>dark_mode</mat-icon>
+        <h3>Dark Theme</h3>
+        <p>Automatic dark theme support for better user experience</p>
+      </div>
+    </div>
+  </div>
+</div>
