@@ -72,8 +72,8 @@ namespace AITravelPlanner.Api.Controllers
             return Ok(travelPlans);
         }
 
-        // POST: api/travelplans
-        [HttpPost]
+        // POST: api/travelplans/CreateTravelPlan
+        [HttpPost("CreateTravelPlan")]
         public async Task<ActionResult<TravelPlanResponse>> CreateTravelPlan(CreateTravelPlanRequest request)
         {
             try

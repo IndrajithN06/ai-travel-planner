@@ -4,11 +4,12 @@ import { LoginComponent } from '../app/features/auth/login/login.component';
 import { SignupComponent } from '../app/features/auth/signup/signup.component';
 import { AuthGuard } from '../app/core/guards/auth.guard';
 import { AuthLayoutComponent } from '../app/layout/auth-layout/auth-layout.component';
+import { TravelCreateComponent } from './features/travel/components/travel-create/travel-create.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
-  { 
-    path: 'auth', 
+  {
+    path: 'auth',
     component: AuthLayoutComponent,
     children: [
       { path: 'login', component: LoginComponent },
@@ -16,18 +17,22 @@ export const routes: Routes = [
       { path: '', redirectTo: 'login', pathMatch: 'full' }
     ]
   },
-  { 
-    path: 'travel', 
+    {
+      path: 'create-plan', component: TravelCreateComponent,
+      canActivate: [AuthGuard]
+  },
+  {
+    path: 'travel',
     loadChildren: () => import('./features/travel/travel.routes').then(m => m.travelRoutes),
     canActivate: [AuthGuard]
   },
-  { 
-    path: 'dashboard', 
+  {
+    path: 'dashboard',
     loadChildren: () => import('./features/dashboard/dashboard.routes').then(m => m.dashboardRoutes),
     canActivate: [AuthGuard]
   },
-  { 
-    path: 'profile', 
+  {
+    path: 'profile',
     loadChildren: () => import('./features/dashboard/dashboard.routes').then(m => m.dashboardRoutes),
     canActivate: [AuthGuard]
   },

@@ -12,7 +12,7 @@ import {
   providedIn: 'root'
 })
 export class TravelService {
-  private readonly apiUrl = `${environment.apiUrl}/api/travelplans`;
+  private readonly apiUrl = `${environment.apiUrl}/travelplans`;
 
   constructor(private http: HttpClient) {}
 
@@ -51,8 +51,8 @@ export class TravelService {
   }
 
   // Create a new travel plan
-  createTravelPlan(request: CreateTravelPlanRequest): Observable<TravelPlan> {
-    return this.http.post<TravelPlan>(this.apiUrl, request);
+  createTravelPlan(request: CreateTravelPlanRequest | any): Observable<TravelPlan> {
+    return this.http.post<TravelPlan>(`${this.apiUrl}/CreateTravelPlan`, request);
   }
 
   // Generate AI travel plan
