@@ -15,9 +15,9 @@ export class AuthInterceptor implements HttpInterceptor {
     // Add auth header if user has a token and request is to our API
     // For logout requests, always try to add token even if expired
     if (this.hasToken() && this.isApiRequest(req)) {
-      console.log('Interceptor: Adding auth header to request:', req.url);
+      // console.log('Interceptor: Adding auth header to request:', req.url);
       req = this.addToken(req);
-      console.log('Interceptor: Request headers after adding token:', req.headers.keys());
+      // console.log('Interceptor: Request headers after adding token:', req.headers.keys());
     } else if (this.isApiRequest(req)) {
       console.log('Interceptor: No token available for API request:', req.url);
     }
@@ -41,7 +41,7 @@ export class AuthInterceptor implements HttpInterceptor {
           Authorization: `Bearer ${token}`
         }
       });
-      console.log('Interceptor: Added Authorization header:', `Bearer ${token.substring(0, 20)}...`);
+      // console.log('Interceptor: Added Authorization header:', `Bearer ${token.substring(0, 20)}...`);
       return newRequest;
     }
     return request;

@@ -182,7 +182,9 @@ export class AuthService {
 
   // Token management methods
   getToken(): string | null {
-    return localStorage.getItem(this.TOKEN_KEY);
+    var token=localStorage.getItem(this.TOKEN_KEY);
+    // console.log('Retrieved token from localStorage:', token ? token.substring(0, 20) + '...' : 'no token');
+    return token;
   }
 
   private setToken(token: string): void {

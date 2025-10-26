@@ -6,5 +6,4 @@ export const travelRoutes: Routes = [
   { path: '', redirectTo: 'demo', pathMatch: 'full' },
   { path: 'demo', component: TravelDemoComponent },
   { path: 'list', component: TravelPlansListComponent },
-  { path: '**', redirectTo: 'demo' }
-];
+  { path: '**', redirectTo: 'demo' }];

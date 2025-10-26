@@ -1,0 +1,63 @@
+<div class="travel-create-container">
+  <h2>Create New Travel Plan</h2>
+
+  <form [formGroup]="travelForm" (ngSubmit)="onSubmit()" class="travel-form">
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Title</mat-label>
+        <input matInput formControlName="title">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Destination</mat-label>
+        <input matInput formControlName="destination">
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Description</mat-label>
+      <textarea matInput formControlName="description" rows="4"></textarea>
+    </mat-form-field>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="half-width">
+        <mat-label>Travel Style</mat-label>
+        <mat-select formControlName="travelStyle">
+          <mat-option *ngFor="let style of travelStyles" [value]="style">{{ style }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="half-width">
+        <mat-label>Group Size</mat-label>
+        <mat-select formControlName="groupSize">
+          <mat-option *ngFor="let size of groupSizes" [value]="size">{{ size }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="half-width">
+        <mat-label>Start Date</mat-label>
+        <input matInput type="date" formControlName="startDate">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="half-width">
+        <mat-label>End Date</mat-label>
+        <input matInput type="date" formControlName="endDate">
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline" class="half-width">
+      <mat-label>Budget</mat-label>
+      <input matInput type="number" formControlName="budget">
+    </mat-form-field>
+
+    <mat-checkbox formControlName="isPublic" class="public-checkbox">Public</mat-checkbox>
+
+    <div class="submit-row">
+      <button mat-flat-button color="primary" type="submit" [disabled]="loading">
+        {{ loading ? 'Creating...' : 'Create Travel Plan' }}
+      </button>
+    </div>
+  </form>
+</div>
