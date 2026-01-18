@@ -86,11 +86,15 @@
 .user-button {
   color: white;
   transition: all 0.3s ease;
+    mat-icon {
+    font-size: 26px;
+  }
 
   &:hover {
     background-color: rgba(255, 255, 255, 0.1);
   }
 }
+
 
 .user-dropdown {
   .user-info {
