@@ -1,0 +1,338 @@
+<div class="details-container">
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Loading travel plan details...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error && !loading" class="error-container">
+    <mat-icon class="error-icon">error_outline</mat-icon>
+    <h2>{{ error }}</h2>
+    <button mat-flat-button color="primary" (click)="onBack()">
+      <mat-icon>arrow_back</mat-icon>
+      Back to List
+    </button>
+  </div>
+
+  <!-- Travel Plan Details -->
+  <div *ngIf="travelPlan && !loading" class="plan-details">
+    <!-- Header Section -->
+    <div class="header-section">
+      <div class="header-background">
+        <div class="destination-image">
+          <mat-icon class="destination-icon">place</mat-icon>
+        </div>
+        <div class="header-overlay">
+          <div class="public-badge" *ngIf="travelPlan.isPublic">
+            <mat-icon>public</mat-icon>
+            <span>Public</span>
+          </div>
+          <div class="ai-badge" *ngIf="travelPlan.aiRecommendations">
+            <mat-icon>auto_awesome</mat-icon>
+            <span>AI Generated</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="header-content">
+        <button mat-icon-button (click)="onBack()" class="back-button">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+        
+        <div class="title-section">
+          <h1 class="plan-title">{{ travelPlan.title }}</h1>
+          <p class="destination">
+            <mat-icon>place</mat-icon>
+            {{ travelPlan.destination }}
+          </p>
+        </div>
+
+        <div class="action-buttons">
+          <button mat-flat-button color="primary" (click)="onEdit()">
+            <mat-icon>edit</mat-icon>
+            Edit Plan
+          </button>
+          <button mat-icon-button class="share-button" (click)="onShare()" matTooltip="Share Plan">
+            <mat-icon>share</mat-icon>
+          </button>
+          <button mat-icon-button class="delete-button" (click)="onDelete()" matTooltip="Delete Plan">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content-section">
+      <!-- Overview Card -->
+      <mat-card class="overview-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>info</mat-icon>
+            Overview
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="overview-grid">
+            <div class="overview-item">
+              <mat-icon>event</mat-icon>
+              <div>
+                <span class="label">Duration</span>
+                <span class="value">{{ duration }} days</span>
+              </div>
+            </div>
+            <div class="overview-item">
+              <mat-icon>date_range</mat-icon>
+              <div>
+                <span class="label">Date Range</span>
+                <span class="value">{{ formattedDateRange }}</span>
+              </div>
+            </div>
+            <div class="overview-item" *ngIf="travelPlan.budget">
+              <mat-icon>attach_money</mat-icon>
+              <div>
+                <span class="label">Budget</span>
+                <span class="value">{{ budgetDisplay }}</span>
+              </div>
+            </div>
+            <div class="overview-item">
+              <mat-icon>{{ travelStyleIcon }}</mat-icon>
+              <div>
+                <span class="label">Travel Style</span>
+                <span class="value">{{ travelPlan.travelStyle || 'Not specified' }}</span>
+              </div>
+            </div>
+            <div class="overview-item">
+              <mat-icon>{{ groupSizeIcon }}</mat-icon>
+              <div>
+                <span class="label">Group Size</span>
+                <span class="value">{{ travelPlan.groupSize || 'Not specified' }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="description-section" *ngIf="travelPlan.description">
+            <h3>Description</h3>
+            <p>{{ travelPlan.description }}</p>
+          </div>
+
+          <div class="chips-section">
+            <mat-chip-set>
+              <mat-chip *ngIf="travelPlan.travelStyle" class="style-chip">
+                <mat-icon>{{ travelStyleIcon }}</mat-icon>
+                {{ travelPlan.travelStyle }}
+              </mat-chip>
+              <mat-chip *ngIf="travelPlan.groupSize" class="group-chip">
+                <mat-icon>{{ groupSizeIcon }}</mat-icon>
+                {{ travelPlan.groupSize }}
+              </mat-chip>
+            </mat-chip-set>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- AI Recommendations Card -->
+      <mat-card class="ai-recommendations-card" *ngIf="travelPlan.aiRecommendations">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>auto_awesome</mat-icon>
+            AI Recommendations
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p>{{ travelPlan.aiRecommendations }}</p>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Activities Section -->
+      <mat-card class="section-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>event_available</mat-icon>
+            Activities
+            <span class="count-badge">{{ travelPlan.activities.length }}</span>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div *ngIf="travelPlan.activities.length === 0" class="empty-state">
+            <mat-icon>event_busy</mat-icon>
+            <p>No activities planned yet</p>
+          </div>
+          <div class="activities-list" *ngIf="travelPlan.activities.length > 0">
+            <div class="activity-item" *ngFor="let activity of travelPlan.activities">
+              <div class="activity-icon">
+                <mat-icon>check_circle</mat-icon>
+              </div>
+              <div class="activity-content">
+                <h4>{{ activity.name }}</h4>
+                <p *ngIf="activity.description">{{ activity.description }}</p>
+                <div class="activity-details">
+                  <span *ngIf="activity.scheduledDate" class="detail-chip">
+                    <mat-icon>calendar_today</mat-icon>
+                    {{ formatDate(activity.scheduledDate) }}
+                  </span>
+                  <span *ngIf="activity.duration" class="detail-chip">
+                    <mat-icon>schedule</mat-icon>
+                    {{ activity.duration }}
+                  </span>
+                  <span *ngIf="activity.location" class="detail-chip">
+                    <mat-icon>location_on</mat-icon>
+                    {{ activity.location }}
+                  </span>
+                  <span *ngIf="activity.category" class="detail-chip category">
+                    {{ activity.category }}
+                  </span>
+                  <span *ngIf="activity.cost" class="detail-chip cost">
+                    <mat-icon>attach_money</mat-icon>
+                    ${{ activity.cost.toLocaleString() }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Accommodations Section -->
+      <mat-card class="section-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>hotel</mat-icon>
+            Accommodations
+            <span class="count-badge">{{ travelPlan.accommodations.length }}</span>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div *ngIf="travelPlan.accommodations.length === 0" class="empty-state">
+            <mat-icon>hotel</mat-icon>
+            <p>No accommodations booked yet</p>
+          </div>
+          <div class="accommodations-grid" *ngIf="travelPlan.accommodations.length > 0">
+            <div class="accommodation-item" *ngFor="let accommodation of travelPlan.accommodations">
+              <div class="accommodation-header">
+                <mat-icon>hotel</mat-icon>
+                <h4>{{ accommodation.name }}</h4>
+              </div>
+              <p *ngIf="accommodation.description" class="accommodation-description">
+                {{ accommodation.description }}
+              </p>
+              <div class="accommodation-details">
+                <div class="detail-row" *ngIf="accommodation.address">
+                  <mat-icon>location_on</mat-icon>
+                  <span>{{ accommodation.address }}</span>
+                </div>
+                <div class="detail-row">
+                  <mat-icon>calendar_today</mat-icon>
+                  <span>
+                    Check-in: {{ formatDate(accommodation.checkInDate) }} | 
+                    Check-out: {{ formatDate(accommodation.checkOutDate) }}
+                  </span>
+                </div>
+                <div class="detail-row" *ngIf="accommodation.type">
+                  <mat-icon>category</mat-icon>
+                  <span>{{ accommodation.type }}</span>
+                </div>
+                <div class="detail-row cost-row" *ngIf="accommodation.costPerNight">
+                  <mat-icon>attach_money</mat-icon>
+                  <span>
+                    ${{ accommodation.costPerNight.toLocaleString() }} per night
+                    <span class="total-cost" *ngIf="accommodation.checkInDate && accommodation.checkOutDate && getAccommodationTotalCost(accommodation) > 0">
+                      (Total: ${{ getAccommodationTotalCost(accommodation).toLocaleString() }})
+                    </span>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Transportation Section -->
+      <mat-card class="section-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>directions_transit</mat-icon>
+            Transportation
+            <span class="count-badge">{{ travelPlan.transportations.length }}</span>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div *ngIf="travelPlan.transportations.length === 0" class="empty-state">
+            <mat-icon>directions_transit</mat-icon>
+            <p>No transportation details added yet</p>
+          </div>
+          <div class="transportations-list" *ngIf="travelPlan.transportations.length > 0">
+            <div class="transportation-item" *ngFor="let transportation of travelPlan.transportations">
+              <div class="transportation-icon">
+                <mat-icon>{{ transportation.type === 'Flight' ? 'flight' : transportation.type === 'Train' ? 'train' : transportation.type === 'Car' ? 'directions_car' : 'directions_transit' }}</mat-icon>
+              </div>
+              <div class="transportation-content">
+                <h4>{{ transportation.type }}<span *ngIf="transportation.provider"> - {{ transportation.provider }}</span></h4>
+                <div class="transportation-details">
+                  <div class="route-info" *ngIf="transportation.fromLocation && transportation.toLocation">
+                    <mat-icon>swap_horiz</mat-icon>
+                    <span>{{ transportation.fromLocation }} → {{ transportation.toLocation }}</span>
+                  </div>
+                  <div class="time-info" *ngIf="transportation.departureTime">
+                    <mat-icon>schedule</mat-icon>
+                    <span>Departure: {{ formatDateTime(transportation.departureTime) }}</span>
+                  </div>
+                  <div class="time-info" *ngIf="transportation.arrivalTime">
+                    <mat-icon>schedule</mat-icon>
+                    <span>Arrival: {{ formatDateTime(transportation.arrivalTime) }}</span>
+                  </div>
+                  <div class="cost-info" *ngIf="transportation.cost">
+                    <mat-icon>attach_money</mat-icon>
+                    <span>${{ transportation.cost.toLocaleString() }}</span>
+                  </div>
+                  <div class="notes-info" *ngIf="transportation.notes">
+                    <mat-icon>note</mat-icon>
+                    <span>{{ transportation.notes }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Budget Summary Card -->
+      <mat-card class="budget-card" *ngIf="travelPlan.budget || estimatedTotalCost > 0">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>account_balance_wallet</mat-icon>
+            Budget Summary
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="budget-breakdown">
+            <div class="budget-item" *ngIf="totalActivitiesCost > 0">
+              <span class="budget-label">Activities</span>
+              <span class="budget-value">${{ totalActivitiesCost.toLocaleString() }}</span>
+            </div>
+            <div class="budget-item" *ngIf="totalAccommodationCost > 0">
+              <span class="budget-label">Accommodations</span>
+              <span class="budget-value">${{ totalAccommodationCost.toLocaleString() }}</span>
+            </div>
+            <div class="budget-item" *ngIf="totalTransportationCost > 0">
+              <span class="budget-label">Transportation</span>
+              <span class="budget-value">${{ totalTransportationCost.toLocaleString() }}</span>
+            </div>
+            <div class="budget-item total" *ngIf="estimatedTotalCost > 0">
+              <span class="budget-label">Estimated Total</span>
+              <span class="budget-value">${{ estimatedTotalCost.toLocaleString() }}</span>
+            </div>
+            <div class="budget-item" *ngIf="travelPlan.budget && estimatedTotalCost > 0">
+              <span class="budget-label">Remaining Budget</span>
+              <span class="budget-value" [class.over-budget]="estimatedTotalCost > travelPlan.budget">
+                ${{ (travelPlan.budget - estimatedTotalCost).toLocaleString() }}
+              </span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>
+

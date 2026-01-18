@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -129,10 +130,13 @@ export class TravelDemoComponent {
     }
   ];
 
-  constructor(private snackBar: MatSnackBar) {}
+  constructor(
+    private snackBar: MatSnackBar,
+    private router: Router
+  ) {}
 
   onViewDetails(plan: TravelPlan): void {
-    this.snackBar.open(`Viewing details for: ${plan.title}`, 'Close', { duration: 2000 });
+    this.router.navigate(['/travel/details', plan.id]);
   }
 
   onEditPlan(plan: TravelPlan): void {

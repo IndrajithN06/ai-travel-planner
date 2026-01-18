@@ -251,8 +251,7 @@ this.loading = true;
   }
 
   onViewDetails(plan: TravelPlan): void {
-    // TODO: Navigate to travel plan details
-    this.snackBar.open(`Viewing details for: ${plan.title}`, 'Close', { duration: 2000 });
+    this.router.navigate(['/travel/details', plan.id]);
   }
 
   onEditPlan(plan: TravelPlan): void {
