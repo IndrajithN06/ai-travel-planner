@@ -2,6 +2,10 @@
 
 A comprehensive full-stack AI-powered travel planner and journal built with **ASP.NET Core Web API** (backend) and **Angular** (frontend), featuring JWT authentication and advanced travel planning capabilities.
 
+<img width="1907" height="873" alt="image" src="https://github.com/user-attachments/assets/cf8ea879-1dd0-4a02-b3a1-22b0cf371d94" />
+
+
+
 ## Features
 
 - **Travel Plan Management**: Create, read, update, and delete travel plans
