@@ -4,6 +4,8 @@ A comprehensive full-stack AI-powered travel planner and journal built with **AS
 
 <img width="1907" height="873" alt="image" src="https://github.com/user-attachments/assets/cf8ea879-1dd0-4a02-b3a1-22b0cf371d94" />
 
+<img width="1899" height="869" alt="image" src="https://github.com/user-attachments/assets/f4e1aa6d-a841-41b9-b502-3ba73828b103" />
+
 
 
 ## Features
