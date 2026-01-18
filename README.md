@@ -47,7 +47,7 @@ The API will be available at `https://localhost:7001` (or the configured port).
 
 ## Database
 
-The application uses Entity Framework Core with SQL Server. The database will be created automatically when you first run the application.
+The application uses Entity Framework Core with SQL Server. The database will be created automatically when you first run the application using `EnsureCreated()`.
 
 ### Connection String
 Update the connection string in `appsettings.json`:
@@ -58,20 +58,53 @@ Update the connection string in `appsettings.json`:
   }
 }
 ```
+
+**Note:** The connection string uses:
+- `Trusted_Connection=true` - Windows Authentication (for local development)
+- `MultipleActiveResultSets=true` - Allows multiple queries on the same connection
+- `TrustServerCertificate=true` - Trusts server certificate without validation (for local development)
+
+### Database Creation Methods
+
+The application currently uses **`EnsureCreated()`** method (configured in `Program.cs`), which automatically creates the database and tables when the application starts for the first time.
+
+**When to use `EnsureCreated()`:**
+- ✅ Development/Prototyping
+- ✅ Quick setup without migrations
+- ✅ Testing scenarios
+
+**When to use Migrations:**
+- ✅ Production environments
+- ✅ Version control of database schema changes
+- ✅ Team collaboration with schema evolution
+
+**If you prefer using Migrations instead:**
+1. Comment out `EnsureCreated()` in `Program.cs`:
+   ```csharp
+   // context.Database.EnsureCreated();
+   ```
+
+2. Create and apply migrations:
+   ```bash
+   dotnet ef migrations add InitialCreate --project AITravelPlanner.Infrastructure --startup-project AITravelPlanner.Api
+   dotnet ef database update --project AITravelPlanner.Infrastructure --startup-project AITravelPlanner.Api
+   ```
+
+**⚠️ Important:** `EnsureCreated()` and Migrations should not be used together. Choose one approach based on your needs.
+
+### Setup Steps
+
 #### Install Dependencies
 ```bash
 dotnet restore
-```
-
-#### Create Database and Apply Migrations
-```bash
-dotnet ef database update --project AITravelPlanner.Infrastructure --startup-project AITravelPlanner.Api
 ```
 
 #### Run the API
 ```bash
 dotnet run --project AITravelPlanner.Api
 ```
+
+The database will be created automatically on first run.
 
 The API will be available at:
 - **API**: `http://localhost:5015`
