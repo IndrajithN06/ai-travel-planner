@@ -18,7 +18,7 @@ import {
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly API_URL = environment.apiUrl || 'https://localhost:7121/api';
+  private readonly API_URL = environment.apiUrl || 'http://localhost:5015/api';
   private readonly TOKEN_KEY = 'auth_token';
   private readonly REFRESH_TOKEN_KEY = 'refresh_token';
   private readonly USER_KEY = 'current_user';
