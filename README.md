@@ -45,28 +45,50 @@ The project follows Clean Architecture principles with the following layers:
 
 The API will be available at `https://localhost:7001` (or the configured port).
 
-## Database
+## Database Setup (Local Development)
 
-The application uses Entity Framework Core with SQL Server. The database will be created automatically when you first run the application using `EnsureCreated()`.
+The application uses **Entity Framework Core** with **SQL Server**. The database will be created automatically when you first run the application.
 
-### SQL Server Installation
+### Step 1: Install SQL Server (Choose based on your OS)
 
-**Before running the application, ensure SQL Server is installed:**
+#### 🪟 Windows:
 
-#### Windows:
-- **SQL Server Express** (Recommended for development): [Download](https://www.microsoft.com/sql-server/sql-server-downloads)
-- **SQL Server LocalDB** (Lightweight, included with Visual Studio): Already installed if you have Visual Studio
-- The default connection string works out-of-the-box with LocalDB/Express
+**Option 1: SQL Server LocalDB (Recommended for development)**
+- ✅ **Included with Visual Studio** - No separate installation needed
+- ✅ Lightweight and perfect for local development
+- ✅ Database files stored in user profile
 
-#### Linux/macOS:
-- **SQL Server for Linux**: [Installation Guide](https://docs.microsoft.com/sql/linux/sql-server-linux-setup)
-- **Docker** (Recommended): `docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=YourStrong@Passw0rd" -p 1433:1433 -d mcr.microsoft.com/mssql/server:2022-latest`
-- Use SQL Authentication connection string (see below)
+**Option 2: SQL Server Express (Full installation)**
+- 📥 [Download SQL Server Express](https://www.microsoft.com/sql-server/sql-server-downloads)
+- Full-featured SQL Server for local development
 
-### Connection String
+#### 🐧 Linux / 🍎 macOS:
 
-The default connection string in `appsettings.json` works for **Windows with SQL Server Express/LocalDB**:
+**Option 1: Docker (Recommended)**
+```bash
+docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=YourStrong@Passw0rd" \
+  -p 1433:1433 -d \
+  --name sqlserver \
+  mcr.microsoft.com/mssql/server:2022-latest
+```
 
+**Option 2: SQL Server for Linux**
+- 📖 [Installation Guide](https://docs.microsoft.com/sql/linux/sql-server-linux-setup)
+
+### Step 2: Configure Connection String
+
+Navigate to `backend/AITravelPlanner.Api/appsettings.json` and update the connection string:
+
+#### For Windows (LocalDB) - Default:
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=AITravelPlannerDb;Trusted_Connection=true;MultipleActiveResultSets=true;TrustServerCertificate=true"
+  }
+}
+```
+
+#### For Windows (SQL Server Express/Full):
 ```json
 {
   "ConnectionStrings": {
@@ -75,10 +97,7 @@ The default connection string in `appsettings.json` works for **Windows with SQL
 }
 ```
 
-**For Windows users:** The connection string above should work immediately if SQL Server is installed.
-
-**For Linux/macOS or SQL Authentication:** Update the connection string to use SQL Authentication:
-
+#### For Linux/macOS (SQL Authentication):
 ```json
 {
   "ConnectionStrings": {
@@ -87,63 +106,71 @@ The default connection string in `appsettings.json` works for **Windows with SQL
 }
 ```
 
-**For SQL Server LocalDB (Windows):** If using LocalDB specifically:
-
-```json
-{
-  "ConnectionStrings": {
-    "DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=AITravelPlannerDb;Trusted_Connection=true;MultipleActiveResultSets=true"
-  }
-}
-```
-
-**Connection String Parameters:**
+**💡 Connection String Parameters Explained:**
+- `Server=(localdb)\\mssqllocaldb` or `Server=localhost` - SQL Server instance location
+- `Database=AITravelPlannerDb` - Database name (will be created automatically)
 - `Trusted_Connection=true` - Windows Authentication (Windows only)
-- `User Id=sa;Password=...` - SQL Authentication (all platforms)
-- `MultipleActiveResultSets=true` - Allows multiple queries on the same connection
-- `TrustServerCertificate=true` - Trusts server certificate without validation (for local development)
+- `User Id=sa;Password=...` - SQL Authentication (Linux/macOS/Docker)
+- `MultipleActiveResultSets=true` - Allows multiple queries on same connection
+- `TrustServerCertificate=true` - Trusts certificate without validation (local dev only)
 
-### Database Creation Methods
+### Step 3: Run the Application
 
-The application currently uses **`EnsureCreated()`** method (configured in `Program.cs`), which automatically creates the database and tables when the application starts for the first time.
+The database will be **automatically created** when you first run the application.
 
-**When to use `EnsureCreated()`:**
-- ✅ Development/Prototyping
-- ✅ Quick setup without migrations
-- ✅ Testing scenarios
-
-**When to use Migrations:**
-- ✅ Production environments
-- ✅ Version control of database schema changes
-- ✅ Team collaboration with schema evolution
-
-**If you prefer using Migrations instead:**
-1. Comment out `EnsureCreated()` in `Program.cs`:
-   ```csharp
-   // context.Database.EnsureCreated();
+1. **Navigate to backend directory:**
+   ```bash
+   cd backend
    ```
 
-2. Create and apply migrations:
+2. **Restore NuGet packages:**
    ```bash
+   dotnet restore
+   ```
+
+3. **Run the API:**
+   ```bash
+   dotnet run --project AITravelPlanner.Api
+   ```
+
+4. **✅ Database Creation:**
+   - On first run, `EnsureCreated()` method (in `Program.cs`) automatically creates:
+     - Database: `AITravelPlannerDb`
+     - All tables: Users, TravelPlans, Activities, Accommodations, Transportations, etc.
+   - No manual database setup required! 🎉
+
+### Database Creation Method
+
+**Current Setup:** The application uses **`EnsureCreated()`** (configured in `Program.cs`), which automatically creates the database and all tables on first application startup.
+
+**✅ Perfect for:**
+- Local development
+- Quick prototyping
+- Testing scenarios
+- Personal projects
+
+**🔄 Alternative - Using Migrations (Optional):**
+
+If you prefer using Entity Framework Migrations instead:
+
+1. Comment out `EnsureCreated()` in `backend/AITravelPlanner.Api/Program.cs`:
+   ```csharp
+   // Ensure database is created
+   // using (var scope = app.Services.CreateScope())
+   // {
+   //     var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+   //     context.Database.EnsureCreated();
+   // }
+   ```
+
+2. Create and apply initial migration:
+   ```bash
+   cd backend
    dotnet ef migrations add InitialCreate --project AITravelPlanner.Infrastructure --startup-project AITravelPlanner.Api
    dotnet ef database update --project AITravelPlanner.Infrastructure --startup-project AITravelPlanner.Api
    ```
 
-**⚠️ Important:** `EnsureCreated()` and Migrations should not be used together. Choose one approach based on your needs.
-
-### Setup Steps
-
-#### Install Dependencies
-```bash
-dotnet restore
-```
-
-#### Run the API
-```bash
-dotnet run --project AITravelPlanner.Api
-```
-
-The database will be created automatically on first run.
+**⚠️ Note:** `EnsureCreated()` and Migrations should **not** be used together. Choose one approach based on your needs.
 
 The API will be available at:
 - **API**: `http://localhost:5015`
