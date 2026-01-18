@@ -134,15 +134,6 @@ The backend follows Clean Architecture principles:
 - **Infrastructure Layer**: Data access and external services
 - **API Layer**: Controllers and HTTP handling
 
-### Adding New Features
-1. Define entities in `Domain/Entities/`
-2. Create interfaces in `Domain/Interfaces/`
-3. Implement business logic in `Application/Services/`
-4. Create repositories in `Infrastructure/Repositories/`
-5. Add controllers in `Api/Controllers/`
-6. Update database with migrations
-
-## 🧪 Testing
 
 ### API Testing
 Use Swagger UI at `http://localhost:5015/swagger/index.html` for testing all endpoints.
@@ -181,18 +172,5 @@ For support and questions:
 - Create an issue in the GitHub repository
 - Check the API documentation at `/swagger`
 - Review the backend README in the `backend/` folder
-
-## 🔮 Roadmap
-
-- [ ] Angular frontend implementation
-- [ ] AI integration for travel recommendations
-- [ ] Email verification system
-- [ ] Role-based authorization
-- [ ] Mobile app development
-- [ ] Social sharing features
-- [ ] Advanced analytics and reporting
-- [ ] Integration with travel APIs (booking, weather, etc.)
-
----
 
 **Built with ❤️ using ASP.NET Core and Angular**
