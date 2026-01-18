@@ -49,8 +49,24 @@ The API will be available at `https://localhost:7001` (or the configured port).
 
 The application uses Entity Framework Core with SQL Server. The database will be created automatically when you first run the application using `EnsureCreated()`.
 
+### SQL Server Installation
+
+**Before running the application, ensure SQL Server is installed:**
+
+#### Windows:
+- **SQL Server Express** (Recommended for development): [Download](https://www.microsoft.com/sql-server/sql-server-downloads)
+- **SQL Server LocalDB** (Lightweight, included with Visual Studio): Already installed if you have Visual Studio
+- The default connection string works out-of-the-box with LocalDB/Express
+
+#### Linux/macOS:
+- **SQL Server for Linux**: [Installation Guide](https://docs.microsoft.com/sql/linux/sql-server-linux-setup)
+- **Docker** (Recommended): `docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=YourStrong@Passw0rd" -p 1433:1433 -d mcr.microsoft.com/mssql/server:2022-latest`
+- Use SQL Authentication connection string (see below)
+
 ### Connection String
-Update the connection string in `appsettings.json`:
+
+The default connection string in `appsettings.json` works for **Windows with SQL Server Express/LocalDB**:
+
 ```json
 {
   "ConnectionStrings": {
@@ -59,8 +75,31 @@ Update the connection string in `appsettings.json`:
 }
 ```
 
-**Note:** The connection string uses:
-- `Trusted_Connection=true` - Windows Authentication (for local development)
+**For Windows users:** The connection string above should work immediately if SQL Server is installed.
+
+**For Linux/macOS or SQL Authentication:** Update the connection string to use SQL Authentication:
+
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=localhost;Database=AITravelPlannerDb;User Id=sa;Password=YourStrong@Passw0rd;MultipleActiveResultSets=true;TrustServerCertificate=true"
+  }
+}
+```
+
+**For SQL Server LocalDB (Windows):** If using LocalDB specifically:
+
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=AITravelPlannerDb;Trusted_Connection=true;MultipleActiveResultSets=true"
+  }
+}
+```
+
+**Connection String Parameters:**
+- `Trusted_Connection=true` - Windows Authentication (Windows only)
+- `User Id=sa;Password=...` - SQL Authentication (all platforms)
 - `MultipleActiveResultSets=true` - Allows multiple queries on the same connection
 - `TrustServerCertificate=true` - Trusts server certificate without validation (for local development)
 
