@@ -49,6 +49,10 @@
         </div>
 
         <div class="action-buttons">
+          <button mat-flat-button color="accent" (click)="onPayNow()" *ngIf="estimatedTotalCost > 0 || travelPlan.budget">
+            <mat-icon>payment</mat-icon>
+            Pay Now
+          </button>
           <button mat-flat-button color="primary" (click)="onEdit()">
             <mat-icon>edit</mat-icon>
             Edit Plan
@@ -330,6 +334,28 @@
               </span>
             </div>
           </div>
+          <div class="payment-action" *ngIf="estimatedTotalCost > 0">
+            <button mat-flat-button color="accent" (click)="onPayNow()" class="pay-button">
+              <mat-icon>payment</mat-icon>
+              Pay {{ estimatedTotalCost | currency:'USD':'symbol':'1.0-0' }}
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Payment Status Card -->
+      <mat-card class="payment-status-card" *ngIf="showPaymentStatus && paymentIntentId">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>receipt</mat-icon>
+            Payment Status
+          </mat-card-title>
+          <button mat-icon-button (click)="closePaymentStatus()" class="close-button">
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-card-header>
+        <mat-card-content>
+          <app-payment-status [paymentIntentId]="paymentIntentId"></app-payment-status>
         </mat-card-content>
       </mat-card>
     </div>

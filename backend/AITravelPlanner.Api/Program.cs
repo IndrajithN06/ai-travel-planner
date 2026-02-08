@@ -94,6 +94,8 @@ builder.Services.AddScoped<ITravelPlanService, TravelPlanService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<JwtService>();
+builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
 
 var app = builder.Build();
 
@@ -115,11 +117,13 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-// Ensure database is created
+// Apply database migrations
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    context.Database.EnsureCreated();
+    // Use migrations instead of EnsureCreated for better control
+    // context.Database.EnsureCreated(); // Commented out - using migrations instead
+    context.Database.Migrate(); // This will apply pending migrations
 }
 
 app.Run();

@@ -1,0 +1,66 @@
+<div class="payment-form-container">
+  <mat-card class="payment-card">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>payment</mat-icon>
+        Complete Payment
+      </mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <!-- Loading State -->
+      <div *ngIf="loading" class="loading-container">
+        <mat-spinner diameter="40"></mat-spinner>
+        <p>Initializing payment...</p>
+      </div>
+
+      <!-- Payment Form -->
+      <form [formGroup]="paymentForm" *ngIf="!loading" (ngSubmit)="onSubmit()">
+        <!-- Amount Display -->
+        <div class="amount-display">
+          <div class="amount-label">Total Amount</div>
+          <div class="amount-value">{{ formatCurrency(amount) }}</div>
+        </div>
+
+        <!-- Card Element Container -->
+        <div class="card-element-container">
+          <label class="card-label">Card Information</label>
+          <div id="card-element" class="card-element">
+            <!-- Stripe Elements will mount here -->
+          </div>
+          <div *ngIf="cardError" class="card-error">
+            <mat-icon>error</mat-icon>
+            {{ cardError }}
+          </div>
+        </div>
+
+        <!-- Payment Info -->
+        <div class="payment-info">
+          <mat-icon>info</mat-icon>
+          <span>Your payment is secured by Stripe. We never store your card details.</span>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+          <button
+            mat-flat-button
+            type="button"
+            color="default"
+            (click)="onCancel()"
+            [disabled]="processing">
+            Cancel
+          </button>
+          <button
+            mat-flat-button
+            type="submit"
+            color="primary"
+            [disabled]="processing || !clientSecret || !!cardError">
+            <mat-spinner *ngIf="processing" diameter="20" class="button-spinner"></mat-spinner>
+            <span *ngIf="!processing">Pay {{ formatCurrency(amount) }}</span>
+            <span *ngIf="processing">Processing...</span>
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

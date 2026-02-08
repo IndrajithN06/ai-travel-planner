@@ -1,0 +1,172 @@
+.payment-form-container {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.payment-card {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+mat-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e0e0e0;
+
+  mat-card-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+
+    mat-icon {
+      color: #1976d2;
+    }
+  }
+}
+
+mat-card-content {
+  padding: 20px 0;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  gap: 20px;
+
+  p {
+    color: #666;
+    font-size: 14px;
+  }
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.amount-display {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 8px;
+  padding: 24px;
+  text-align: center;
+  color: white;
+
+  .amount-label {
+    font-size: 14px;
+    opacity: 0.9;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .amount-value {
+    font-size: 32px;
+    font-weight: 700;
+  }
+}
+
+.card-element-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  .card-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 4px;
+  }
+
+  .card-element {
+    padding: 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    background: white;
+    transition: border-color 0.3s;
+
+    &:focus-within {
+      border-color: #1976d2;
+    }
+  }
+
+  .card-error {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #d32f2f;
+    font-size: 12px;
+    margin-top: 4px;
+
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+    }
+  }
+}
+
+.payment-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px;
+  background: #e3f2fd;
+  border-radius: 4px;
+  font-size: 13px;
+  color: #1976d2;
+
+  mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.action-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 8px;
+
+  button {
+    min-width: 120px;
+
+    .button-spinner {
+      margin-right: 8px;
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 600px) {
+  .payment-form-container {
+    padding: 10px;
+  }
+
+  .amount-display {
+    padding: 20px;
+
+    .amount-value {
+      font-size: 28px;
+    }
+  }
+
+  .action-buttons {
+    flex-direction: column;
+
+    button {
+      width: 100%;
+    }
+  }
+}
