@@ -52,8 +52,12 @@ namespace AITravelPlanner.Domain.Entities
 
         public DateTime? UpdatedDate { get; set; }
 
+        [MaxLength(255)]
+        public string? StripeCustomerId { get; set; }
+
         // Navigation properties
         public virtual ICollection<TravelPlan> TravelPlans { get; set; } = new List<TravelPlan>();
+        public virtual ICollection<Payment> Payments { get; set; } = new List<Payment>();
 
         // Computed property for full name (Not mapped to DB)
         [NotMapped]

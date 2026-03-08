@@ -13,6 +13,8 @@ import { Subject, takeUntil } from 'rxjs';
 import { TravelService } from '../../services/travel.service';
 import { TravelPlan, Activity, Accommodation, Transportation } from '../../models/travel-plan.model';
 import { DeleteConfirmationDialogComponent } from '../delete-confirmation-dialog/delete-confirmation-dialog.component';
+import { PaymentFormComponent } from '../../../payment/components/payment-form/payment-form.component';
+import { PaymentStatusComponent } from '../../../payment/components/payment-status/payment-status.component';
 
 @Component({
   selector: 'app-travel-plan-details',
@@ -26,7 +28,8 @@ import { DeleteConfirmationDialogComponent } from '../delete-confirmation-dialog
     MatProgressSpinnerModule,
     MatSnackBarModule,
     MatDialogModule,
-    MatTooltipModule
+    MatTooltipModule,
+    PaymentStatusComponent
   ],
   templateUrl: './travel-plan-details.component.html',
   styleUrl: './travel-plan-details.component.scss'
@@ -36,6 +39,8 @@ export class TravelPlanDetailsComponent implements OnInit, OnDestroy {
   loading = false;
   error: string | null = null;
   planId!: number;
+  showPaymentStatus = false;
+  paymentIntentId: string | null = null;
 
   private destroy$ = new Subject<void>();
 
@@ -269,6 +274,55 @@ export class TravelPlanDetailsComponent implements OnInit, OnDestroy {
     const checkOut = new Date(accommodation.checkOutDate);
     const nights = Math.ceil((checkOut.getTime() - checkIn.getTime()) / (1000 * 60 * 60 * 24));
     return accommodation.costPerNight * nights;
+  }
+
+  /**
+   * Open payment dialog
+   */
+  onPayNow(): void {
+    if (!this.travelPlan) return;
+
+    const paymentAmount = this.estimatedTotalCost > 0 
+      ? this.estimatedTotalCost 
+      : (this.travelPlan.budget || 100); // Default to budget or $100
+
+    const dialogRef = this.dialog.open(PaymentFormComponent, {
+      width: '600px',
+      maxWidth: '90vw',
+      data: {
+        travelPlanId: this.travelPlan.id,
+        amount: paymentAmount,
+        currency: 'USD',
+        description: `Payment for travel plan: ${this.travelPlan.title}`
+      },
+      disableClose: true
+    });
+
+    dialogRef.componentInstance.paymentSuccess
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((paymentIntentId: string) => {
+        this.paymentIntentId = paymentIntentId;
+        this.showPaymentStatus = true;
+        dialogRef.close();
+        this.snackBar.open('Payment successful!', 'Close', {
+          duration: 3000,
+          panelClass: ['success-snackbar']
+        });
+      });
+
+    dialogRef.componentInstance.paymentCancel
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        dialogRef.close();
+      });
+  }
+
+  /**
+   * Close payment status view
+   */
+  closePaymentStatus(): void {
+    this.showPaymentStatus = false;
+    this.paymentIntentId = null;
   }
 }
 

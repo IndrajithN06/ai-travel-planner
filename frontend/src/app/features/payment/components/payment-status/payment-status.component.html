@@ -1,0 +1,47 @@
+<div class="payment-status-container">
+  <mat-card class="status-card">
+    <!-- Loading State -->
+    <div *ngIf="loading" class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Checking payment status...</p>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="error && !loading" class="error-container">
+      <mat-icon color="warn">error_outline</mat-icon>
+      <p>{{ error }}</p>
+    </div>
+
+    <!-- Payment Status -->
+    <div *ngIf="paymentStatus && !loading" class="status-content">
+      <div class="status-header">
+        <mat-icon [color]="getStatusColor()" class="status-icon">
+          {{ getStatusIcon() }}
+        </mat-icon>
+        <h2>{{ getStatusMessage() }}</h2>
+      </div>
+
+      <div class="status-details">
+        <div class="detail-item">
+          <span class="label">Amount:</span>
+          <span class="value">{{ formatCurrency(paymentStatus.amount, paymentStatus.currency) }}</span>
+        </div>
+        <div class="detail-item" *ngIf="paymentStatus.completedDate">
+          <span class="label">Completed:</span>
+          <span class="value">{{ paymentStatus.completedDate | date:'medium' }}</span>
+        </div>
+        <div class="detail-item">
+          <span class="label">Payment ID:</span>
+          <span class="value payment-id">{{ paymentStatus.paymentIntentId }}</span>
+        </div>
+      </div>
+
+      <div class="status-actions" *ngIf="paymentStatus.status === 'succeeded' && paymentStatus.receiptUrl">
+        <button mat-flat-button color="primary" (click)="openReceipt()">
+          <mat-icon>receipt</mat-icon>
+          View Receipt
+        </button>
+      </div>
+    </div>
+  </mat-card>
+</div>

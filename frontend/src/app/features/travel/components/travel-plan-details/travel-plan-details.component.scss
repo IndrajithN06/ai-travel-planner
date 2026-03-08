@@ -219,6 +219,55 @@ mat-card {
   .budget-value.over-budget {
     color: #ef4444;
   }
+
+  .payment-action {
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: center;
+
+    .pay-button {
+      min-width: 200px;
+      height: 48px;
+      font-size: 16px;
+      font-weight: 600;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+      transition: all 0.3s ease;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(102, 126, 234, 0.6);
+      }
+
+      mat-icon {
+        margin-right: 8px;
+      }
+    }
+  }
+}
+
+/* ---------- Payment Status ---------- */
+.payment-status-card {
+  background: linear-gradient(135deg, #1f2933, #111827);
+  border-left: 5px solid #06b6d4;
+
+  mat-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .close-button {
+      color: #9ca3af;
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: #f9fafb;
+      }
+    }
+  }
 }
 
 /* ---------- Responsive ---------- */

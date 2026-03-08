@@ -55,7 +55,10 @@ export class AuthService {
             this.isAuthenticatedSubject.next(true);
           }
         }),
-        catchError(this.handleError)
+        catchError(error => {
+          console.error('Login error:', error);
+          return this.handleError(error);
+        })
       );
   }
 

@@ -15,6 +15,8 @@ namespace AITravelPlanner.Infrastructure.Data
         public DbSet<Activity> Activities { get; set; }
         public DbSet<Accommodation> Accommodations { get; set; }
         public DbSet<Transportation> Transportations { get; set; }
+        public DbSet<Payment> Payments { get; set; }
+        public DbSet<PaymentTransaction> PaymentTransactions { get; set; }
 
         public DbSet<Flight> Flights { get; set; }
         public DbSet<Hotel> Hotels { get; set; }
