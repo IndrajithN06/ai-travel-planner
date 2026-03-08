@@ -15,7 +15,7 @@
       </div>
 
       <!-- Payment Form -->
-      <form [formGroup]="paymentForm" *ngIf="!loading" (ngSubmit)="onSubmit()">
+      <form [formGroup]="paymentForm"  (ngSubmit)="onSubmit()">
         <!-- Amount Display -->
         <div class="amount-display">
           <div class="amount-label">Total Amount</div>

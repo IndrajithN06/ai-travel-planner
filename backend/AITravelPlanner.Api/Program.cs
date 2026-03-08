@@ -7,9 +7,10 @@ using AITravelPlanner.Application.Services;
 using AITravelPlanner.Infrastructure.Data;
 using AITravelPlanner.Infrastructure.Repositories;
 using Microsoft.OpenApi.Models;
+using Stripe;
 
 var builder = WebApplication.CreateBuilder(args);
-
+StripeConfiguration.ApiKey=builder.Configuration["Stripe:SecretKey"];
 // Add services to the container.
 builder.Services.AddControllers();
 

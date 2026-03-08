@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Output, EventEmitter, Inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter, Inject, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
@@ -40,7 +40,7 @@ export interface PaymentFormData {
   templateUrl: './payment-form.component.html',
   styleUrl: './payment-form.component.scss'
 })
-export class PaymentFormComponent implements OnInit, OnDestroy {
+export class PaymentFormComponent implements OnInit, OnDestroy, AfterViewInit {
   @Output() paymentSuccess = new EventEmitter<string>();
   @Output() paymentCancel = new EventEmitter<void>();
 
@@ -80,8 +80,12 @@ export class PaymentFormComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit(): Promise<void> {
-    await this.initializeStripe();
+    // await this.initializeStripe();
     this.createPaymentIntent();
+  }
+
+  async ngAfterViewInit(): Promise<void> {
+    await this.initializeStripe();
   }
 
   ngOnDestroy(): void {
@@ -95,7 +99,7 @@ export class PaymentFormComponent implements OnInit, OnDestroy {
   private async initializeStripe(): Promise<void> {
     try {
       this.stripe = await this.stripeLoader.getStripe();
-      
+
       if (!this.stripe) {
         this.snackBar.open(
           'Stripe is not configured. Please add your Stripe publishable key to environment configuration.',
@@ -122,17 +126,25 @@ export class PaymentFormComponent implements OnInit, OnDestroy {
       });
 
       // Mount card element - use setTimeout to ensure DOM is ready
-      setTimeout(() => {
-        const cardElementContainer = document.getElementById('card-element');
-        if (cardElementContainer && this.cardElement) {
-          this.cardElement.mount('#card-element');
-          this.cardElement.on('change', (event) => {
-            this.cardError = event.error ? event.error.message : null;
-          });
-        } else {
-          console.error('Card element container not found');
-        }
-      }, 100);
+      // setTimeout(() => {
+      //   const cardElementContainer = document.getElementById('card-element');
+      //   if (cardElementContainer && this.cardElement) {
+      //     this.cardElement.mount('#card-element');
+      //     this.cardElement.on('change', (event) => {
+      //       this.cardError = event.error ? event.error.message : null;
+      //     });
+      //   } else {
+      //     console.error('Card element container not found');
+      //   }
+      // }, 100);
+
+      if (this.cardElement) {
+        this.cardElement.mount('#card-element');
+        this.cardElement.on('change', (event) => {
+          this.cardError = event.error ? event.error.message : null;
+        });
+      }
+
     } catch (error) {
       console.error('Error initializing Stripe:', error);
       this.snackBar.open('Failed to initialize payment system', 'Close', {
@@ -147,7 +159,7 @@ export class PaymentFormComponent implements OnInit, OnDestroy {
    */
   private createPaymentIntent(): void {
     this.loading = true;
-    
+
     const request: CreatePaymentIntentRequest = {
       travelPlanId: this.travelPlanId,
       amount: this.amount,
