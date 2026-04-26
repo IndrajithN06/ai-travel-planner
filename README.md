@@ -1,277 +1,199 @@
-# AI Travel Planner 🚀
+# AI Travel Planner
 
-A comprehensive full-stack AI-powered travel planner and journal built with **ASP.NET Core Web API** (backend) and **Angular** (frontend), featuring JWT authentication and advanced travel planning capabilities.
+AI Travel Planner is a full-stack travel planning app with:
+- **ASP.NET Core Web API** backend (Clean Architecture)
+- **Angular 19** frontend
+- **JWT authentication**
+- **Stripe payment flow** for travel plans
 
-<img width="1907" height="873" alt="image" src="https://github.com/user-attachments/assets/cf8ea879-1dd0-4a02-b3a1-22b0cf371d94" />
+## Tech Stack
 
-<img width="1899" height="869" alt="image" src="https://github.com/user-attachments/assets/f4e1aa6d-a841-41b9-b502-3ba73828b103" />
+### Backend
+- .NET 9 / ASP.NET Core Web API
+- Entity Framework Core + SQL Server
+- JWT bearer authentication
+- Stripe .NET SDK
 
+### Frontend
+- Angular 19
+- Angular Material / CDK
+- Stripe.js (`@stripe/stripe-js`)
 
+---
 
-## Features
+## Repository Structure
 
-- **Travel Plan Management**: Create, read, update, and delete travel plans
-- **AI-Powered Generation**: Generate travel plans with AI recommendations
-- **Activity Management**: Manage activities within travel plans
-- **Accommodation Management**: Handle accommodation bookings
-- **Transportation Management**: Manage transportation details
-- **Public/Private Plans**: Share travel plans publicly or keep them private
-- **Search & Filter**: Search by destination, travel style, and date range
-
-## Architecture
-
-The project follows Clean Architecture principles with the following layers:
-
-- **Domain**: Entities, interfaces, and DTOs
-- **Application**: Business logic and services
-- **Infrastructure**: Data access and external services
-- **API**: Controllers and HTTP endpoints
-
-## Getting Started
-
-### Prerequisites
-
-- .NET 9.0 SDK
-- SQL Server (LocalDB for development)
-- Visual Studio 2022 or VS Code
-
-### Installation
-
-1. Clone the repository
-2. Navigate to the backend directory
-3. Restore NuGet packages:
-   ```bash
-   dotnet restore
-   ```
-4. Update the connection string in `appsettings.json` if needed
-5. Run the application:
-   ```bash
-   dotnet run --project AITravelPlanner.Api
-   ```
-
-The API will be available at `https://localhost:7001` (or the configured port).
-
-## Database Setup (Local Development)
-
-The application uses **Entity Framework Core** with **SQL Server**. The database will be created automatically when you first run the application.
-
-### Step 1: Install SQL Server (Choose based on your OS)
-
-#### 🪟 Windows:
-
-**Option 1: SQL Server LocalDB (Recommended for development)**
-- ✅ **Included with Visual Studio** - No separate installation needed
-- ✅ Lightweight and perfect for local development
-- ✅ Database files stored in user profile
-
-**Option 2: SQL Server Express (Full installation)**
-- 📥 [Download SQL Server Express](https://www.microsoft.com/sql-server/sql-server-downloads)
-- Full-featured SQL Server for local development
-
-#### 🐧 Linux / 🍎 macOS:
-
-**Option 1: Docker (Recommended)**
-```bash
-docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=YourStrong@Passw0rd" \
-  -p 1433:1433 -d \
-  --name sqlserver \
-  mcr.microsoft.com/mssql/server:2022-latest
+```text
+ai-travel-planner/
+├── backend/
+│   ├── AITravelPlanner.Api/              # API host, controllers, DI, auth, Swagger
+│   ├── AITravelPlanner.Application/      # Application services/use-cases
+│   ├── AITravelPlanner.Domain/           # Entities, DTOs, interfaces
+│   ├── AITravelPlanner.Infrastructure/   # EF Core DbContext, migrations, repositories
+│   └── AITravelPlanner.sln
+├── frontend/                             # Angular client app
+├── PAYMENT_SETUP_GUIDE.md
+├── DATABASE_MIGRATION_GUIDE.md
+└── README.md
 ```
 
-**Option 2: SQL Server for Linux**
-- 📖 [Installation Guide](https://docs.microsoft.com/sql/linux/sql-server-linux-setup)
+---
 
-### Step 2: Configure Connection String
+## Current Features
 
-Navigate to `backend/AITravelPlanner.Api/appsettings.json` and update the connection string:
+- User registration/login with JWT + refresh token flow
+- Protected API endpoints with `[Authorize]`
+- Travel plan CRUD
+- Travel plan generation endpoint (`/api/travelplans/generate`)
+- Nested management for activities, accommodations, and transportation
+- Search/filter travel plans by destination, style, and date range
+- Stripe payment intent creation + webhook handling
+- User payment history endpoints
+- Angular UI with auth pages, dashboard, and travel planning pages
 
-#### For Windows (LocalDB) - Default:
-```json
-{
-  "ConnectionStrings": {
-    "DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=AITravelPlannerDb;Trusted_Connection=true;MultipleActiveResultSets=true;TrustServerCertificate=true"
-  }
-}
-```
+---
 
-#### For Windows (SQL Server Express/Full):
+## Backend Setup
+
+### 1) Prerequisites
+- .NET 9 SDK
+- SQL Server (LocalDB/SQL Express/full SQL Server)
+
+### 2) Configure API settings
+Edit:
+- `backend/AITravelPlanner.Api/appsettings.Development.json`
+- `backend/AITravelPlanner.Api/appsettings.json`
+
+Required configuration:
+
 ```json
 {
   "ConnectionStrings": {
     "DefaultConnection": "Server=localhost;Database=AITravelPlannerDb;Trusted_Connection=true;MultipleActiveResultSets=true;TrustServerCertificate=true"
-  }
-}
-```
-
-#### For Linux/macOS (SQL Authentication):
-```json
-{
-  "ConnectionStrings": {
-    "DefaultConnection": "Server=localhost;Database=AITravelPlannerDb;User Id=sa;Password=YourStrong@Passw0rd;MultipleActiveResultSets=true;TrustServerCertificate=true"
-  }
-}
-```
-
-**💡 Connection String Parameters Explained:**
-- `Server=(localdb)\\mssqllocaldb` or `Server=localhost` - SQL Server instance location
-- `Database=AITravelPlannerDb` - Database name (will be created automatically)
-- `Trusted_Connection=true` - Windows Authentication (Windows only)
-- `User Id=sa;Password=...` - SQL Authentication (Linux/macOS/Docker)
-- `MultipleActiveResultSets=true` - Allows multiple queries on same connection
-- `TrustServerCertificate=true` - Trusts certificate without validation (local dev only)
-
-### Step 3: Run the Application
-
-The database will be **automatically created** when you first run the application.
-
-1. **Navigate to backend directory:**
-   ```bash
-   cd backend
-   ```
-
-2. **Restore NuGet packages:**
-   ```bash
-   dotnet restore
-   ```
-
-3. **Run the API:**
-   ```bash
-   dotnet run --project AITravelPlanner.Api
-   ```
-
-4. **✅ Database Creation:**
-   - On first run, `EnsureCreated()` method (in `Program.cs`) automatically creates:
-     - Database: `AITravelPlannerDb`
-     - All tables: Users, TravelPlans, Activities, Accommodations, Transportations, etc.
-   - No manual database setup required! 🎉
-
-### Database Creation Method
-
-**Current Setup:** The application uses **`EnsureCreated()`** (configured in `Program.cs`), which automatically creates the database and all tables on first application startup.
-
-**✅ Perfect for:**
-- Local development
-- Quick prototyping
-- Testing scenarios
-- Personal projects
-
-**🔄 Alternative - Using Migrations (Optional):**
-
-If you prefer using Entity Framework Migrations instead:
-
-1. Comment out `EnsureCreated()` in `backend/AITravelPlanner.Api/Program.cs`:
-   ```csharp
-   // Ensure database is created
-   // using (var scope = app.Services.CreateScope())
-   // {
-   //     var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-   //     context.Database.EnsureCreated();
-   // }
-   ```
-
-2. Create and apply initial migration:
-   ```bash
-   cd backend
-   dotnet ef migrations add InitialCreate --project AITravelPlanner.Infrastructure --startup-project AITravelPlanner.Api
-   dotnet ef database update --project AITravelPlanner.Infrastructure --startup-project AITravelPlanner.Api
-   ```
-
-**⚠️ Note:** `EnsureCreated()` and Migrations should **not** be used together. Choose one approach based on your needs.
-
-The API will be available at:
-- **API**: `http://localhost:5015`
-- **Swagger UI**: `http://localhost:5015/swagger/index.html`
-
-### 3. Frontend Setup (Coming Soon)
-```bash
-cd frontend
-npm install
-ng serve
-```
-
-## 🔐 Authentication
-
-### JWT Configuration
-The API uses JWT tokens for authentication. Configuration is in `appsettings.json`:
-
-```json
-{
+  },
   "Jwt": {
-    "SecretKey": "your-super-secret-key-here-minimum-32-characters",
+    "SecretKey": "<your-secret-key>",
     "Issuer": "AITravelPlanner",
     "Audience": "AITravelPlannerUsers",
     "ExpirationHours": 24
+  },
+  "Stripe": {
+    "PublishableKey": "pk_test_...",
+    "SecretKey": "sk_test_...",
+    "WebhookSecret": "whsec_...",
+    "Currency": "USD"
   }
 }
 ```
 
-### Using Swagger UI
-1. Open `http://localhost:5015/swagger/index.html`
-2. Register a new user using `POST /api/auth/register`
-3. Login using `POST /api/auth/login` to get a JWT token
-4. Click the "Authorize" button and enter: `Bearer your_token_here`
-5. All protected endpoints will now include the token automatically
+### 3) Run backend
 
-## 🔧 Development
-
-### Project Structure
-```
-ai-travel-planner/
-├── backend/                        # Backend API
-│   ├── AITravelPlanner.Api/       # API Controllers & Configuration
-│   ├── AITravelPlanner.Application/# Business Logic Services
-│   ├── AITravelPlanner.Domain/    # Entities & Interfaces
-│   ├── AITravelPlanner.Infrastructure/ # Data Access & Repositories
-│   └── AITravelPlanner.sln        # Solution file
-├── frontend/                      # Angular Frontend (Coming Soon)
-├── README.md                      # This file
-└── LICENSE                        # License file
+```bash
+cd backend
+dotnet restore
+dotnet run --project AITravelPlanner.Api
 ```
 
-### Clean Architecture
-The backend follows Clean Architecture principles:
-- **Domain Layer**: Core business entities and interfaces
-- **Application Layer**: Business logic and use cases
-- **Infrastructure Layer**: Data access and external services
-- **API Layer**: Controllers and HTTP handling
+On startup, the app applies pending EF Core migrations automatically (`context.Database.Migrate()`).
 
+Default local URLs (Development profile):
+- `http://localhost:5015`
+- `https://localhost:7121`
 
-### API Testing
-Use Swagger UI at `http://localhost:5015/swagger/index.html` for testing all endpoints.
+Swagger:
+- `https://localhost:7121/swagger`
+- `http://localhost:5015/swagger`
 
-### Database Testing
-- SQL Server Management Studio (SSMS)
-- Connection string: `Server=localhost;Database=AITravelPlannerDb;Trusted_Connection=true`
+---
 
-## 🚀 Deployment
+## Frontend Setup
 
-### Backend Deployment
-1. Build the project: `dotnet build`
-2. Publish: `dotnet publish -c Release`
-3. Deploy to Azure App Service, AWS, or other cloud platforms
+### 1) Install dependencies
 
-### Database Deployment
-1. Create production database
-2. Update connection string
-3. Run migrations: `dotnet ef database update`
+```bash
+cd frontend
+npm install
+```
 
-## 🤝 Contributing
+### 2) Verify environment API URL
 
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature-name`
-3. Commit changes: `git commit -m 'Add feature'`
-4. Push to branch: `git push origin feature-name`
-5. Submit a pull request
+`frontend/src/environments/environment.ts` should point to your API (default in repo is):
 
-## 📝 License
+```ts
+apiUrl: 'https://localhost:7121/api'
+```
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+### 3) Run frontend
 
-## 🆘 Support
+```bash
+npm start
+```
 
-For support and questions:
-- Create an issue in the GitHub repository
-- Check the API documentation at `/swagger`
-- Review the backend README in the `backend/` folder
+Frontend runs at `http://localhost:4200` by default.
 
-**Built with ❤️ using ASP.NET Core and Angular**
+---
+
+## Key API Endpoints
+
+### Auth
+- `POST /api/auth/register`
+- `POST /api/auth/login`
+- `POST /api/auth/refresh-token`
+- `POST /api/auth/logout`
+- `GET /api/auth/me`
+
+### Travel Plans
+- `GET /api/travelplans`
+- `GET /api/travelplans/public`
+- `GET /api/travelplans/{id}`
+- `GET /api/travelplans/destination/{destination}`
+- `GET /api/travelplans/style/{travelStyle}`
+- `GET /api/travelplans/date-range?startDate=...&endDate=...`
+- `POST /api/travelplans/CreateTravelPlan`
+- `POST /api/travelplans/generate`
+- `PUT /api/travelplans/{id}`
+- `DELETE /api/travelplans/{id}`
+
+Nested resources:
+- Activities: `/api/travelplans/{id}/activities`, `/api/travelplans/activities/{activityId}`
+- Accommodations: `/api/travelplans/{id}/accommodations`, `/api/travelplans/accommodations/{accommodationId}`
+- Transportations: `/api/travelplans/{id}/transportations`, `/api/travelplans/transportations/{transportationId}`
+
+### Payments
+- `POST /api/payment/create-intent`
+- `GET /api/payment/{paymentIntentId}/status`
+- `GET /api/payment/{paymentId}`
+- `GET /api/payment/user/{userId}`
+- `GET /api/payment/my-payments`
+- `POST /api/payment/webhook` (anonymous for Stripe callbacks)
+
+---
+
+## App Routes (Frontend)
+
+- `/` home
+- `/auth/login`, `/auth/signup`
+- `/dashboard`
+- `/create-plan`
+- `/travel/demo`
+- `/travel/list`
+- `/travel/details/:id`
+
+Most app routes are protected by the Angular auth guard.
+
+---
+
+## Useful Docs in this Repo
+
+- `PAYMENT_SETUP_GUIDE.md`
+- `PAYMENT_QUICK_REFERENCE.md`
+- `PAYMENT_UI_EXPLANATION.md`
+- `PAYMENT_INTEGRATION_PLAN.md`
+- `DATABASE_MIGRATION_GUIDE.md`
+- `MIGRATION_COMPLETE.md`
+
+---
+
+## License
+
+This project is licensed under the terms in `LICENSE`.
